@@ -17,13 +17,11 @@ Frame_Run = 6
 Frame_Jump = 8
 
 
-RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SPACE,Mode1,Mode2,Mode3,Mode4 = range(9)
+RIGHT_DOWN, RIGHT_UP, SPACE,Mode1,Mode2,Mode3,Mode4 = range(7)
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_RIGHT): RIGHT_DOWN,
-    (SDL_KEYDOWN, SDLK_LEFT): LEFT_DOWN,
     (SDL_KEYUP, SDLK_RIGHT): RIGHT_UP,
-    (SDL_KEYUP, SDLK_LEFT): LEFT_UP,
     (SDL_KEYDOWN, SDLK_SPACE): SPACE,
     (SDL_KEYDOWN, SDLK_1): Mode1,
     (SDL_KEYDOWN, SDLK_2): Mode2,
@@ -58,12 +56,8 @@ class IdleState:
 class RunState:
     @staticmethod
     def enter(muk, event):
-        if event == RIGHT_DOWN:
-            muk.velocity += RUN_SPEED_PPS
-        elif event == RIGHT_UP:
-            muk.velocity -= RUN_SPEED_PPS
-        elif event == SPACE:
-            muk.velocity -= RUN_SPEED_PPS
+        muk.velocity = RUN_SPEED_PPS
+
 
     @staticmethod
     def exit(muk, event):
@@ -132,6 +126,7 @@ class JumpState:
             muk.frame = (muk.frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 8
             muk.y -= muk.velocity * Framework.frame_time
         if (muk.frame < 1):
+            muk.velocity -= RUN_SPEED_PPS
             muk.add_event(RIGHT_DOWN)
 
     @staticmethod
@@ -147,11 +142,11 @@ class JumpState:
 
 
 next_state_table = {
-    IdleState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, SPACE: JumpState,
+    IdleState: {RIGHT_UP: IdleState, RIGHT_DOWN: RunState, SPACE: JumpState,
                 Mode1: IdleState, Mode2: IdleState, Mode3: IdleState, Mode4: IdleState},
-    RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, SPACE: JumpState,
+    RunState: {RIGHT_UP: IdleState, RIGHT_DOWN: IdleState, SPACE: JumpState,
                 Mode1 : RunState,Mode2 : RunState,Mode3 : RunState,Mode4 : RunState},
-    JumpState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, SPACE: JumpState,
+    JumpState: {RIGHT_UP: IdleState, RIGHT_DOWN: IdleState, SPACE: JumpState,
                Mode1: RunState, Mode2: RunState, Mode3: RunState, Mode4: RunState}
 }
 
