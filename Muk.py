@@ -14,6 +14,7 @@ TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0
 Frame_Idle = 4
 Frame_Run = 6
+Frame_Jump = 8
 
 
 RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SPACE,Mode1,Mode2,Mode3,Mode4 = range(9)
@@ -33,8 +34,7 @@ key_event_table = {
 class IdleState:
     @staticmethod
     def enter(muk, event):
-        if event == RIGHT_UP:
-            muk.velocity -= RUN_SPEED_PPS
+        pass
 
     @staticmethod
     def exit(muk, event):
@@ -61,6 +61,8 @@ class RunState:
         if event == RIGHT_DOWN:
             muk.velocity += RUN_SPEED_PPS
         elif event == RIGHT_UP:
+            muk.velocity -= RUN_SPEED_PPS
+        elif event == SPACE:
             muk.velocity -= RUN_SPEED_PPS
 
     @staticmethod
@@ -104,11 +106,53 @@ class RunState:
         elif muk.Mode == 4:
             muk.Run_image.clip_composite_draw(int(muk.frame) * 110, 0, 110, 200, -3.141492 / 2, '', muk.x, muk.y, 110,200)
 
+class JumpState:
+    @staticmethod
+    def enter(muk, event):
+        pass
+
+    @staticmethod
+    def exit(muk, event):
+        pass
+
+    @staticmethod
+    def do(muk):
+        print('%d', muk.frame)
+        if muk.Mode == 1:
+            muk.frame = (muk.frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 8
+            muk.x += muk.velocity * Framework.frame_time
+            muk.y += 100 * math.sin(Framework.frame_time/8)
+        elif muk.Mode == 2:
+            muk.frame = (muk.frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 8
+            muk.y += muk.velocity * Framework.frame_time
+        elif muk.Mode == 3:
+            muk.frame = (muk.frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 8
+            muk.x -= muk.velocity * Framework.frame_time
+        elif muk.Mode == 4:
+            muk.frame = (muk.frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 8
+            muk.y -= muk.velocity * Framework.frame_time
+        if (muk.frame < 1):
+            muk.add_event(RIGHT_DOWN)
+
+    @staticmethod
+    def draw(muk):
+        if muk.Mode == 1:
+            muk.Jump_image.clip_draw(int(muk.frame) * 120, 0, 120, 190, muk.x, muk.y)
+        elif muk.Mode == 2:
+            muk.Jump_image.clip_composite_draw(int(muk.frame) * 120, 0, 120, 190, 3.141492 / 2, '', muk.x, muk.y, 120, 190)
+        elif muk.Mode == 3:
+            muk.Jump_image.clip_composite_draw(int(muk.frame) * 120, 0, 120, 190, 3.141492, '', muk.x, muk.y, 120, 190)
+        elif muk.Mode == 4:
+            muk.Jump_image.clip_composite_draw(int(muk.frame) * 120, 0, 120, 190, -3.141492 / 2, '', muk.x, muk.y, 120,190)
+
+
 next_state_table = {
-    IdleState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, SPACE: IdleState,
+    IdleState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, SPACE: JumpState,
                 Mode1: IdleState, Mode2: IdleState, Mode3: IdleState, Mode4: IdleState},
-    RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, SPACE: RunState,
-                Mode1 : RunState,Mode2 : RunState,Mode3 : RunState,Mode4 : RunState}
+    RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, SPACE: JumpState,
+                Mode1 : RunState,Mode2 : RunState,Mode3 : RunState,Mode4 : RunState},
+    JumpState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, SPACE: JumpState,
+               Mode1: RunState, Mode2: RunState, Mode3: RunState, Mode4: RunState}
 }
 
 class Muk:
