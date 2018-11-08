@@ -10,8 +10,10 @@ RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
+Jump_Height = 10.0
+
 TIME_PER_ACTION = 0.5
-ACTION_PER_TIME = 1.0
+ACTION_PER_TIME = 1.5
 Frame_Idle = 4
 Frame_Run = 6
 Frame_Jump = 8
@@ -32,7 +34,7 @@ key_event_table = {
 class IdleState:
     @staticmethod
     def enter(muk, event):
-        pass
+        muk.jump_frame = 0
 
     @staticmethod
     def exit(muk, event):
@@ -57,7 +59,6 @@ class RunState:
     @staticmethod
     def enter(muk, event):
         muk.velocity = RUN_SPEED_PPS
-
 
     @staticmethod
     def exit(muk, event):
@@ -88,6 +89,8 @@ class RunState:
         elif muk.Mode == 4:
             muk.frame = (muk.frame + Frame_Run * ACTION_PER_TIME * Framework.frame_time) % 6
             muk.y -= muk.velocity * Framework.frame_time
+        if(muk.jump_frame < 1):
+            muk.add_event(RIGHT_DOWN)
 
     @staticmethod
     def draw(muk):
@@ -103,7 +106,7 @@ class RunState:
 class JumpState:
     @staticmethod
     def enter(muk, event):
-        pass
+        muk.jump_frame = 1
 
     @staticmethod
     def exit(muk, event):
@@ -111,34 +114,36 @@ class JumpState:
 
     @staticmethod
     def do(muk):
-        print('%d', muk.frame)
+        print('%d', muk.jump_frame)
         if muk.Mode == 1:
-            muk.frame = (muk.frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 8
-            muk.x += muk.velocity * Framework.frame_time
-            muk.y += 100 * math.sin(Framework.frame_time/8)
+            muk.jump_frame = (muk.jump_frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 7
+            muk.x += muk.velocity * Framework.frame_time * 2
+            muk.y += Jump_Height * -math.cos(muk.jump_frame + 1)
+            if(int(muk.jump_frame) == 0):
+                muk.y = 90
         elif muk.Mode == 2:
-            muk.frame = (muk.frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 8
+            muk.jump_frame = (muk.jump_frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 8
             muk.y += muk.velocity * Framework.frame_time
         elif muk.Mode == 3:
-            muk.frame = (muk.frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 8
+            muk.jump_frame = (muk.jump_frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 8
             muk.x -= muk.velocity * Framework.frame_time
         elif muk.Mode == 4:
-            muk.frame = (muk.frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 8
+            muk.jump_frame = (muk.jump_frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 8
             muk.y -= muk.velocity * Framework.frame_time
-        if (muk.frame < 1):
-            muk.velocity -= RUN_SPEED_PPS
+        if (int(muk.jump_frame) == 0):
+            print("으악")
             muk.add_event(RIGHT_DOWN)
 
     @staticmethod
     def draw(muk):
         if muk.Mode == 1:
-            muk.Jump_image.clip_draw(int(muk.frame) * 120, 0, 120, 190, muk.x, muk.y)
+            muk.Jump_image.clip_draw(int(muk.jump_frame) * 120, 0, 120, 190, muk.x, muk.y)
         elif muk.Mode == 2:
-            muk.Jump_image.clip_composite_draw(int(muk.frame) * 120, 0, 120, 190, 3.141492 / 2, '', muk.x, muk.y, 120, 190)
+            muk.Jump_image.clip_composite_draw(int(muk.jump_frame) * 120, 0, 120, 190, 3.141492 / 2, '', muk.x, muk.y, 120, 190)
         elif muk.Mode == 3:
-            muk.Jump_image.clip_composite_draw(int(muk.frame) * 120, 0, 120, 190, 3.141492, '', muk.x, muk.y, 120, 190)
+            muk.Jump_image.clip_composite_draw(int(muk.jump_frame) * 120, 0, 120, 190, 3.141492, '', muk.x, muk.y, 120, 190)
         elif muk.Mode == 4:
-            muk.Jump_image.clip_composite_draw(int(muk.frame) * 120, 0, 120, 190, -3.141492 / 2, '', muk.x, muk.y, 120,190)
+            muk.Jump_image.clip_composite_draw(int(muk.jump_frame) * 120, 0, 120, 190, -3.141492 / 2, '', muk.x, muk.y, 120,190)
 
 
 next_state_table = {
@@ -146,7 +151,7 @@ next_state_table = {
                 Mode1: IdleState, Mode2: IdleState, Mode3: IdleState, Mode4: IdleState},
     RunState: {RIGHT_UP: IdleState, RIGHT_DOWN: IdleState, SPACE: JumpState,
                 Mode1 : RunState,Mode2 : RunState,Mode3 : RunState,Mode4 : RunState},
-    JumpState: {RIGHT_UP: IdleState, RIGHT_DOWN: IdleState, SPACE: JumpState,
+    JumpState: {RIGHT_UP: RunState, RIGHT_DOWN: IdleState, SPACE: JumpState,
                Mode1: RunState, Mode2: RunState, Mode3: RunState, Mode4: RunState}
 }
 
@@ -159,6 +164,7 @@ class Muk:
         self.dir = 1
         self.velocity = 0
         self.frame = 0
+        self.jump_frame = 0
         self.font = load_font('ENCR10B.TTF', 16)
         self.Mode = 1
         self.Life = 5
