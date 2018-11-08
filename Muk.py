@@ -116,6 +116,7 @@ class Muk:
         self.x, self.y = 500, 90
         self.Idle_image = load_image("Idle.png")
         self.Run_image = load_image("Right_run.png")
+        self.Jump_image = load_image("Jump_Right.png")
         self.dir = 1
         self.velocity = 0
         self.frame = 0
