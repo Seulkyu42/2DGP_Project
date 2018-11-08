@@ -122,13 +122,25 @@ class JumpState:
 
         elif muk.Mode == 2:
             muk.jump_frame = (muk.jump_frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 8
-            muk.y += muk.velocity * Framework.frame_time
+            muk.x -= Jump_Height * -math.cos(muk.jump_frame + 1)
+            muk.y += muk.velocity * Framework.frame_time * 3
+            if(int(muk.jump_frame) == 0):
+                muk.x = 1500
+
         elif muk.Mode == 3:
             muk.jump_frame = (muk.jump_frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 8
-            muk.x -= muk.velocity * Framework.frame_time
+            muk.x -= muk.velocity * Framework.frame_time * 2
+            muk.y -= Jump_Height * -math.cos(muk.jump_frame + 1)
+            if(int(muk.jump_frame) == 0):
+                muk.y = 750
+
         elif muk.Mode == 4:
             muk.jump_frame = (muk.jump_frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 8
-            muk.y -= muk.velocity * Framework.frame_time
+            muk.y -= muk.velocity * Framework.frame_time * 3
+            muk.x += Jump_Height * -math.cos(muk.jump_frame + 1)
+            if(int(muk.jump_frame) == 0):
+                muk.x = 100
+                
         if (int(muk.jump_frame) == 0):
             print("으악")
             muk.add_event(RIGHT_DOWN)
