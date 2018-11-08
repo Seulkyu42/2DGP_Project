@@ -12,7 +12,7 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
 Jump_Height = 10.0
 
-TIME_PER_ACTION = 0.5
+TIME_PER_ACTION = 1.0
 ACTION_PER_TIME = 1.5
 Frame_Idle = 4
 Frame_Run = 6
@@ -89,8 +89,6 @@ class RunState:
         elif muk.Mode == 4:
             muk.frame = (muk.frame + Frame_Run * ACTION_PER_TIME * Framework.frame_time) % 6
             muk.y -= muk.velocity * Framework.frame_time
-        if(muk.jump_frame < 1):
-            muk.add_event(RIGHT_DOWN)
 
     @staticmethod
     def draw(muk):
@@ -121,6 +119,7 @@ class JumpState:
             muk.y += Jump_Height * -math.cos(muk.jump_frame + 1)
             if(int(muk.jump_frame) == 0):
                 muk.y = 90
+
         elif muk.Mode == 2:
             muk.jump_frame = (muk.jump_frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 8
             muk.y += muk.velocity * Framework.frame_time
@@ -151,7 +150,7 @@ next_state_table = {
                 Mode1: IdleState, Mode2: IdleState, Mode3: IdleState, Mode4: IdleState},
     RunState: {RIGHT_UP: IdleState, RIGHT_DOWN: IdleState, SPACE: JumpState,
                 Mode1 : RunState,Mode2 : RunState,Mode3 : RunState,Mode4 : RunState},
-    JumpState: {RIGHT_UP: RunState, RIGHT_DOWN: IdleState, SPACE: JumpState,
+    JumpState: {RIGHT_UP: RunState, RIGHT_DOWN: RunState, SPACE: JumpState,
                Mode1: RunState, Mode2: RunState, Mode3: RunState, Mode4: RunState}
 }
 
