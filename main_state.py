@@ -42,7 +42,7 @@ def enter():
 
     global grass
     grass = Grass()
-    game_world.add_object(grass,3)
+    game_world.add_object(grass,0)
 
     global monster1
     monster1 = Monster1()

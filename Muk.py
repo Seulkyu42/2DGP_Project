@@ -183,6 +183,7 @@ next_state_table = {
 class Muk:
     def __init__(self):
         self.x, self.y = 500, 90
+        self.camx = 500 #camera_x
         self.Idle_image = load_image("Idle.png")
         self.Run_image = load_image("Right_run.png")
         self.Jump_image = load_image("Jump_Right.png")
