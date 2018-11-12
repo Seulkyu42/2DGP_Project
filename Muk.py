@@ -2,7 +2,7 @@ import Framework
 from pico2d import *
 import os
 
-os.chdir("C:\\Users\\김민규\\Documents\\Github\\2DGP\\Drills\\Game Project\\Resources")
+os.chdir("C:\\Users\\김민규\\Documents\\Github\\2DGP_Project\\Resources")
 
 PIXEL_PER_METER = (10.0/0.3)
 RUN_SPEED_KMPH = 30.0
@@ -34,7 +34,12 @@ key_event_table = {
 class IdleState:
     @staticmethod
     def enter(muk, event):
+        if event == RIGHT_DOWN:
+            muk.velocity += RUN_SPEED_PPS
+        elif event == RIGHT_UP:
+            muk.velocity -= RUN_SPEED_PPS
         muk.jump_frame = 0
+        muk.y = 90
 
     @staticmethod
     def exit(muk, event):
@@ -58,7 +63,12 @@ class IdleState:
 class RunState:
     @staticmethod
     def enter(muk, event):
-        muk.velocity = RUN_SPEED_PPS
+        if event == RIGHT_DOWN:
+            muk.velocity += RUN_SPEED_PPS
+        elif event == RIGHT_UP:
+            muk.velocity -= RUN_SPEED_PPS
+        muk.y = 90
+
 
     @staticmethod
     def exit(muk, event):
@@ -104,6 +114,10 @@ class RunState:
 class JumpState:
     @staticmethod
     def enter(muk, event):
+        if event == RIGHT_DOWN:
+            muk.velocity += RUN_SPEED_PPS
+        elif event == RIGHT_UP:
+            muk.velocity -= RUN_SPEED_PPS
         muk.jump_frame = 1
 
     @staticmethod
@@ -162,8 +176,8 @@ next_state_table = {
                 Mode1: IdleState, Mode2: IdleState, Mode3: IdleState, Mode4: IdleState},
     RunState: {RIGHT_UP: IdleState, RIGHT_DOWN: IdleState, SPACE: JumpState,
                 Mode1 : RunState,Mode2 : RunState,Mode3 : RunState,Mode4 : RunState},
-    JumpState: {RIGHT_UP: RunState, RIGHT_DOWN: RunState, SPACE: JumpState,
-               Mode1: RunState, Mode2: RunState, Mode3: RunState, Mode4: RunState}
+    JumpState: {RIGHT_UP: IdleState, RIGHT_DOWN: RunState, SPACE: JumpState,
+               Mode1: IdleState, Mode2: IdleState, Mode3: IdleState, Mode4: IdleState}
 }
 
 class Muk:

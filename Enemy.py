@@ -5,7 +5,7 @@ import Framework
 import os
 import main_state
 
-os.chdir("C:\\Users\\김민규\\Documents\\Github\\2DGP\\Drills\\Game Project\\Resources")
+os.chdir("C:\\Users\\김민규\\Documents\\Github\\2DGP_Project\\Resources")
 
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 0.5

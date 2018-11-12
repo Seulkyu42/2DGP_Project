@@ -2,7 +2,7 @@ from pico2d import *
 import os
 import main_state
 
-os.chdir("C:\\Users\\김민규\\Documents\\Github\\2DGP\\Drills\\Game Project\\Resources")
+os.chdir("C:\\Users\\김민규\\Documents\\Github\\2DGP_Project\\Resources")
 
 class Grass:
     def __init__(self):
