@@ -52,13 +52,13 @@ class IdleState:
     @staticmethod
     def draw(muk):
         if muk.Mode == 1:
-            muk.Idle_image.clip_draw(int(muk.frame) * 100, 0, 100, 200, muk.camx, muk.y)
+            muk.Idle_image.clip_draw(int(muk.frame) * 100, 0, 100, 200, muk.camx, muk.camy)
         elif muk.Mode == 2:
-            muk.Idle_image.clip_composite_draw(int(muk.frame) * 100, 0, 100, 200, 3.141492 / 2, '', muk.x, muk.y, 100,200)
+            muk.Idle_image.clip_composite_draw(int(muk.frame) * 100, 0, 100, 200, 3.141492 / 2, '', muk.camx, muk.camy, 100,200)
         elif muk.Mode == 3:
-            muk.Idle_image.clip_composite_draw(int(muk.frame) * 100, 0, 100, 200, 3.141492, '', muk.x, muk.y, 100, 200)
+            muk.Idle_image.clip_composite_draw(int(muk.frame) * 100, 0, 100, 200, 3.141492, '', muk.camx, muk.camy, 100, 200)
         elif muk.Mode == 4:
-            muk.Idle_image.clip_composite_draw(int(muk.frame) * 100, 0, 100, 200, -3.141492 / 2, '', muk.x, muk.y, 100,200)
+            muk.Idle_image.clip_composite_draw(int(muk.frame) * 100, 0, 100, 200, -3.141492 / 2, '', muk.camx, muk.camy, 100,200)
 
 class RunState:
     @staticmethod
@@ -82,9 +82,11 @@ class RunState:
             muk.Mode = 2
         elif event == Mode3:
             muk.x,muk.y = 1500,750
+            muk.camx, muk.camy = 1500, 750
             muk.Mode = 3
         elif event == Mode4:
             muk.x,muk.y = 100,750
+            muk.camx,muk.camy = 100,750
             muk.Mode = 4
 
     @staticmethod
@@ -167,13 +169,13 @@ class JumpState:
     @staticmethod
     def draw(muk):
         if muk.Mode == 1:
-            muk.Jump_image.clip_draw(int(muk.jump_frame) * 120, 0, 120, 190, muk.camx, muk.y)
+            muk.Jump_image.clip_draw(int(muk.jump_frame) * 120, 0, 120, 190, muk.camx, muk.camy)
         elif muk.Mode == 2:
-            muk.Jump_image.clip_composite_draw(int(muk.jump_frame) * 120, 0, 120, 190, 3.141492 / 2, '', muk.x, muk.y, 120, 190)
+            muk.Jump_image.clip_composite_draw(int(muk.jump_frame) * 120, 0, 120, 190, 3.141492 / 2, '', muk.camx, muk.camy, 120, 190)
         elif muk.Mode == 3:
-            muk.Jump_image.clip_composite_draw(int(muk.jump_frame) * 120, 0, 120, 190, 3.141492, '', muk.x, muk.y, 120, 190)
+            muk.Jump_image.clip_composite_draw(int(muk.jump_frame) * 120, 0, 120, 190, 3.141492, '', muk.camx, muk.camy, 120, 190)
         elif muk.Mode == 4:
-            muk.Jump_image.clip_composite_draw(int(muk.jump_frame) * 120, 0, 120, 190, -3.141492 / 2, '', muk.x, muk.y, 120,190)
+            muk.Jump_image.clip_composite_draw(int(muk.jump_frame) * 120, 0, 120, 190, -3.141492 / 2, '', muk.camx, muk.camy, 120,190)
 
 
 next_state_table = {
