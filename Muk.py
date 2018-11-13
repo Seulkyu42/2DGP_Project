@@ -114,10 +114,7 @@ class RunState:
 class JumpState:
     @staticmethod
     def enter(muk, event):
-        if event == RIGHT_DOWN:
-            muk.velocity += RUN_SPEED_PPS
-        elif event == RIGHT_UP:
-            muk.velocity -= RUN_SPEED_PPS
+        muk.velocity = RUN_SPEED_PPS
         muk.jump_frame = 1
 
     @staticmethod
