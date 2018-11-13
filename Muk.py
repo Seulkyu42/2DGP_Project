@@ -52,7 +52,7 @@ class IdleState:
     @staticmethod
     def draw(muk):
         if muk.Mode == 1:
-            muk.Idle_image.clip_draw(int(muk.frame) * 100, 0, 100, 200, muk.x, muk.y)
+            muk.Idle_image.clip_draw(int(muk.frame) * 100, 0, 100, 200, muk.camx, muk.y)
         elif muk.Mode == 2:
             muk.Idle_image.clip_composite_draw(int(muk.frame) * 100, 0, 100, 200, 3.141492 / 2, '', muk.x, muk.y, 100,200)
         elif muk.Mode == 3:
@@ -73,10 +73,12 @@ class RunState:
     @staticmethod
     def exit(muk, event):
         if event == Mode1:
-            muk.x,muk.y = 100,75
+            muk.x, muk.y = 100, 75
+            muk.camx, muk.camy = 100, 75
             muk.Mode = 1
         elif event == Mode2:
             muk.x,muk.y = 1500,75
+            muk.camx, muk.camy = 1500, 75
             muk.Mode = 2
         elif event == Mode3:
             muk.x,muk.y = 1500,750
@@ -91,11 +93,14 @@ class RunState:
             muk.frame = (muk.frame + Frame_Run * ACTION_PER_TIME * Framework.frame_time) % 6
             muk.x += muk.velocity * Framework.frame_time
             muk.camx += muk.velocity * Framework.frame_time
-            if(muk.x > 800 and muk.x < 4200):
+            if(muk.x > 750 and muk.x < 4200): #750 : X중심
                 muk.camx = 750
         elif muk.Mode == 2:
             muk.frame = (muk.frame + Frame_Run * ACTION_PER_TIME * Framework.frame_time) % 6
             muk.y += muk.velocity * Framework.frame_time
+            muk.camy += muk.velocity * Framework.frame_time
+            if (muk.y > 400 and muk.y < 4200): #400 : Y중심
+                muk.camy = 400
         elif muk.Mode == 3:
             muk.frame = (muk.frame + Frame_Run * ACTION_PER_TIME * Framework.frame_time) % 6
             muk.x -= muk.velocity * Framework.frame_time
@@ -106,13 +111,13 @@ class RunState:
     @staticmethod
     def draw(muk):
         if muk.Mode == 1:
-            muk.Run_image.clip_draw(int(muk.frame) * 110, 0, 110, 200, muk.camx, muk.y)
+            muk.Run_image.clip_draw(int(muk.frame) * 110, 0, 110, 200, muk.camx, muk.camy)
         elif muk.Mode == 2:
-            muk.Run_image.clip_composite_draw(int(muk.frame) * 110, 0, 110, 200, 3.141492 / 2, '', muk.camx, muk.y, 110,200)
+            muk.Run_image.clip_composite_draw(int(muk.frame) * 110, 0, 110, 200, 3.141492 / 2, '', muk.camx, muk.camy, 110,200)
         elif muk.Mode == 3:
-            muk.Run_image.clip_composite_draw(int(muk.frame) * 110, 0, 110, 200, 3.141492, '', muk.x, muk.y, 110, 200)
+            muk.Run_image.clip_composite_draw(int(muk.frame) * 110, 0, 110, 200, 3.141492, '', muk.camx, muk.camy, 110, 200)
         elif muk.Mode == 4:
-            muk.Run_image.clip_composite_draw(int(muk.frame) * 110, 0, 110, 200, -3.141492 / 2, '', muk.x, muk.y, 110,200)
+            muk.Run_image.clip_composite_draw(int(muk.frame) * 110, 0, 110, 200, -3.141492 / 2, '', muk.camx, muk.camy, 110,200)
 
 class JumpState:
     @staticmethod
@@ -162,7 +167,7 @@ class JumpState:
     @staticmethod
     def draw(muk):
         if muk.Mode == 1:
-            muk.Jump_image.clip_draw(int(muk.jump_frame) * 120, 0, 120, 190, muk.x, muk.y)
+            muk.Jump_image.clip_draw(int(muk.jump_frame) * 120, 0, 120, 190, muk.camx, muk.y)
         elif muk.Mode == 2:
             muk.Jump_image.clip_composite_draw(int(muk.jump_frame) * 120, 0, 120, 190, 3.141492 / 2, '', muk.x, muk.y, 120, 190)
         elif muk.Mode == 3:
@@ -182,8 +187,9 @@ next_state_table = {
 
 class Muk:
     def __init__(self):
-        self.x, self.y = 500, 90
-        self.camx = 500 #camera_x
+        self.x, self.y = 0, 90
+        self.camx = 0  #camera_x
+        self.camy = 90  #camera_y
         self.Idle_image = load_image("Idle.png")
         self.Run_image = load_image("Right_run.png")
         self.Jump_image = load_image("Jump_Right.png")
@@ -200,9 +206,9 @@ class Muk:
 
     def get_bb(self):
         if self.Mode == 1 or self.Mode == 3:
-            return self.camx - 50, self.y - 100, self.camx + 50, self.y + 100
+            return self.camx - 50, self.camy - 100, self.camx + 50, self.camy + 100
         elif self.Mode == 2 or self.Mode == 4:
-            return self.x - 100, self.y - 50, self.x + 100, self.y + 50
+            return self.camx - 100, self.camy - 50, self.camx + 100, self.camy + 50
 
     def add_event(self, event):
         self.event_que.insert(0, event)
@@ -217,7 +223,7 @@ class Muk:
 
     def draw(self):
         self.cur_state.draw(self)
-        self.font.draw(self.camx - 55, self.y + 110, '(Mode : %d)' % self.Mode, (255, 0, 0))
+        self.font.draw(self.camx - 55, self.camy + 110, '(Mode : %d)' % self.Mode, (255, 0, 0))
         draw_rectangle(*self.get_bb())
 
     def handle_event(self, event):
