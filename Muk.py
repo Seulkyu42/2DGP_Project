@@ -90,6 +90,9 @@ class RunState:
         if muk.Mode == 1:
             muk.frame = (muk.frame + Frame_Run * ACTION_PER_TIME * Framework.frame_time) % 6
             muk.x += muk.velocity * Framework.frame_time
+            muk.camx += muk.velocity * Framework.frame_time
+            if(muk.x > 800 and muk.x < 4200):
+                muk.camx = 750
         elif muk.Mode == 2:
             muk.frame = (muk.frame + Frame_Run * ACTION_PER_TIME * Framework.frame_time) % 6
             muk.y += muk.velocity * Framework.frame_time
@@ -103,9 +106,9 @@ class RunState:
     @staticmethod
     def draw(muk):
         if muk.Mode == 1:
-            muk.Run_image.clip_draw(int(muk.frame) * 110, 0, 110, 200, muk.x, muk.y)
+            muk.Run_image.clip_draw(int(muk.frame) * 110, 0, 110, 200, muk.camx, muk.y)
         elif muk.Mode == 2:
-            muk.Run_image.clip_composite_draw(int(muk.frame) * 110, 0, 110, 200, 3.141492 / 2, '', muk.x, muk.y, 110,200)
+            muk.Run_image.clip_composite_draw(int(muk.frame) * 110, 0, 110, 200, 3.141492 / 2, '', muk.camx, muk.y, 110,200)
         elif muk.Mode == 3:
             muk.Run_image.clip_composite_draw(int(muk.frame) * 110, 0, 110, 200, 3.141492, '', muk.x, muk.y, 110, 200)
         elif muk.Mode == 4:
@@ -197,7 +200,7 @@ class Muk:
 
     def get_bb(self):
         if self.Mode == 1 or self.Mode == 3:
-            return self.x - 50, self.y - 100, self.x + 50, self.y + 100
+            return self.camx - 50, self.y - 100, self.camx + 50, self.y + 100
         elif self.Mode == 2 or self.Mode == 4:
             return self.x - 100, self.y - 50, self.x + 100, self.y + 50
 
@@ -214,7 +217,7 @@ class Muk:
 
     def draw(self):
         self.cur_state.draw(self)
-        self.font.draw(self.x - 55, self.y + 110, '(Mode : %d)' % self.Mode, (255, 0, 0))
+        self.font.draw(self.camx - 55, self.y + 110, '(Mode : %d)' % self.Mode, (255, 0, 0))
         draw_rectangle(*self.get_bb())
 
     def handle_event(self, event):
