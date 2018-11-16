@@ -16,4 +16,11 @@ class Life:
 
     def draw(self):
         for i in range(0, main_state.muk.Life):
-            self.image.draw(100 + 50 * i, 850)
+            if main_state.muk.Mode == 1:
+                self.image.draw(100 + 50 * i, 850)
+            elif main_state.muk.Mode == 2:
+                self.image.composite_draw(3.14/2,'',50,100 + 50 * i)
+            elif main_state.muk.Mode == 3:
+                self.image.composite_draw(3.14,'',1500 - 50 * i, 50)
+            elif main_state.muk.Mode == 4:
+                self.image.composite_draw(3.14/2,'',1550,800 - 50 * i)

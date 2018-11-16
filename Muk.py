@@ -199,9 +199,10 @@ class Muk:
         self.velocity = 0
         self.frame = 0
         self.jump_frame = 0
-        self.font = load_font('ENCR10B.TTF', 16)
+        self.font = load_font('koverwatch.ttf', 40)
         self.Mode = 1
         self.Life = 5
+        self.Score = 0
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
@@ -226,6 +227,7 @@ class Muk:
     def draw(self):
         self.cur_state.draw(self)
         self.font.draw(self.camx - 55, self.camy + 110, '(Mode : %d)' % self.Mode, (255, 0, 0))
+        self.font.draw(1200,840, 'Total Score : %d' % self.Score, (255, 0, 0))
         draw_rectangle(*self.get_bb())
 
     def handle_event(self, event):
