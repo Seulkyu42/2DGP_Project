@@ -28,3 +28,17 @@ class Monster1:
     def draw(self):
         self.image.clip_draw(int(self.frame) * 100, 0 , 100, 150, self.x - main_state.muk.x / 2,self.y)
         draw_rectangle(*self.get_bb())
+
+class Brick:
+    def __init__(self):
+        self.x = 2000
+        self.y = 0
+
+    def update(self):
+        pass
+
+    def get_bb(self):
+        return self.x - 10 - main_state.muk.x / 2, self.y,self.x + 10 - main_state.muk.x / 2, self.y + 600
+
+    def draw(self):
+        draw_rectangle(*self.get_bb())

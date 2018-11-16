@@ -91,6 +91,8 @@ class RunState:
 
     @staticmethod
     def do(muk):
+        muk.Score += muk.frame / 8
+
         if muk.Mode == 1:
             muk.frame = (muk.frame + Frame_Run * ACTION_PER_TIME * Framework.frame_time) % 6
             muk.x += muk.velocity * Framework.frame_time
@@ -138,7 +140,15 @@ class JumpState:
             muk.jump_frame = (muk.jump_frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 7
             muk.x += muk.velocity * Framework.frame_time * 2
             muk.y += Jump_Height * -math.cos(muk.jump_frame + 1)
+
+            muk.camx += muk.velocity * Framework.frame_time * 2
+            muk.camy += Jump_Height * -math.cos(muk.jump_frame + 1)
+
+            if(muk.x > 750 and muk.x < 4200): #750 : X중심
+                muk.camx = 750
+
             if(int(muk.jump_frame) == 0):
+                muk.camy = 90
                 muk.y = 90
 
         elif muk.Mode == 2:
@@ -183,7 +193,7 @@ next_state_table = {
                 Mode1: IdleState, Mode2: IdleState, Mode3: IdleState, Mode4: IdleState},
     RunState: {RIGHT_UP: IdleState, RIGHT_DOWN: IdleState, SPACE: JumpState,
                 Mode1 : RunState,Mode2 : RunState,Mode3 : RunState,Mode4 : RunState},
-    JumpState: {RIGHT_UP: IdleState, RIGHT_DOWN: RunState, SPACE: JumpState,
+    JumpState: {RIGHT_UP: JumpState, RIGHT_DOWN: RunState, SPACE: JumpState,
                Mode1: IdleState, Mode2: IdleState, Mode3: IdleState, Mode4: IdleState}
 }
 
@@ -226,7 +236,7 @@ class Muk:
 
     def draw(self):
         self.cur_state.draw(self)
-        self.font.draw(self.camx - 55, self.camy + 110, '(Mode : %d)' % self.Mode, (255, 0, 0))
+        #self.font.draw(self.camx - 55, self.camy + 110, '(Mode : %d)' % self.Mode, (255, 0, 0))
         self.font.draw(1200,840, 'Total Score : %d' % self.Score, (255, 0, 0))
         draw_rectangle(*self.get_bb())
 

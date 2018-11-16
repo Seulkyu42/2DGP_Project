@@ -9,7 +9,7 @@ import game_world
 from Muk import Muk
 from background import Back
 from Grass import Grass
-from Enemy import Monster1
+from Enemy import Monster1,Brick
 from Ui import Life
 
 name = "MainState"
@@ -18,6 +18,7 @@ muk = None
 back = None
 grass = None
 monster1 = None
+brick  = None
 life = None
 
 def collide(a, b):
@@ -44,9 +45,11 @@ def enter():
     grass = Grass()
     game_world.add_object(grass,0)
 
-    global monster1
+    global monster1,brick
     monster1 = Monster1()
+    brick = Brick()
     game_world.add_object(monster1, 2)
+    game_world.add_object(brick, 2)
 
     global life
     life = Life()
@@ -73,7 +76,7 @@ def handle_events():
 
 
 def update():
-    global muk,monster1
+    global muk,monster1,brick
     for game_object in game_world.all_objects():
         game_object.update()
 
@@ -82,6 +85,13 @@ def update():
         muk.x -= 100
         muk.Life -= 1
         monster1.x = random.randint(0,1600)
+        print("Life %d" % muk.Life)
+
+
+    if collide(muk,brick):
+        print("충돌")
+        muk.x -= 100
+        muk.Life -= 1
         print("Life %d" % muk.Life)
 
 def draw():
