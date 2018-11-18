@@ -23,10 +23,10 @@ class Monster1:
         self.frame = (self.frame + Frame_Monster1 * ACTION_PER_TIME * Framework.frame_time) % 8
 
     def get_bb(self):
-        return self.x - 40 - main_state.muk.x / 2, self.y - 75, self.x + 40 - main_state.muk.x / 2, self.y + 50
+        return self.x - 40 - main_state.muk.x, self.y - 75, self.x + 40 - main_state.muk.x , self.y + 50
 
     def draw(self):
-        self.image.clip_draw(int(self.frame) * 100, 0 , 100, 150, self.x - main_state.muk.x / 2,self.y)
+        self.image.clip_draw(int(self.frame) * 100, 0 , 100, 150, self.x - main_state.muk.x,self.y)
         draw_rectangle(*self.get_bb())
 
 class Brick:

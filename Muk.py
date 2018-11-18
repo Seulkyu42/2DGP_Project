@@ -41,7 +41,8 @@ class IdleState:
         elif event == RIGHT_UP:
             muk.velocity -= RUN_SPEED_PPS
         muk.jump_frame = 0
-        muk.y = 90
+        if muk.Mode == 1 or muk.Mode == 3:
+            muk.y = 90
 
     @staticmethod
     def exit(muk, event):
@@ -69,7 +70,8 @@ class RunState:
             muk.velocity += RUN_SPEED_PPS
         elif event == RIGHT_UP:
             muk.velocity -= RUN_SPEED_PPS
-        muk.y = 90
+        if muk.Mode == 1 or muk.Mode == 3:
+            muk.y = 90
 
 
     @staticmethod
@@ -83,11 +85,11 @@ class RunState:
             muk.camx, muk.camy = 1500, 75
             muk.Mode = 2
         elif event == Mode3:
-            muk.x,muk.y = 1500,750
+            muk.x,muk.y = 5000,750
             muk.camx, muk.camy = 1500, 750
             muk.Mode = 3
         elif event == Mode4:
-            muk.x,muk.y = 100,750
+            muk.x,muk.y = 100,4600
             muk.camx,muk.camy = 100,750
             muk.Mode = 4
 
@@ -110,9 +112,15 @@ class RunState:
         elif muk.Mode == 3:
             muk.frame = (muk.frame + Frame_Run * ACTION_PER_TIME * Framework.frame_time) % 6
             muk.x -= muk.velocity * Framework.frame_time
+            muk.camx -= muk.velocity * Framework.frame_time
+            if(muk.x > 750 and muk.x < 4200): #750 : X중심
+                muk.camx = 750
         elif muk.Mode == 4:
             muk.frame = (muk.frame + Frame_Run * ACTION_PER_TIME * Framework.frame_time) % 6
             muk.y -= muk.velocity * Framework.frame_time
+            muk.camy -= muk.velocity * Framework.frame_time
+            if (muk.y > 400 and muk.y < 4200): #400 : Y중심
+                muk.camy = 400
 
     @staticmethod
     def draw(muk):
@@ -191,6 +199,9 @@ class JumpState:
             muk.camy -= muk.velocity * Framework.frame_time * 3
             muk.camx += Jump_Height * -math.cos(muk.jump_frame + 1)
 
+            if(muk.y > 350 and muk.y < 4200):
+                muk.camy = 350
+
             if(int(muk.jump_frame) == 0):
                 muk.x = 100
                 muk.camx = 100
@@ -232,7 +243,9 @@ class Muk:
         self.velocity = 0
         self.frame = 0
         self.jump_frame = 0
-        self.font = load_font('koverwatch.ttf', 40)
+        self.font1 = load_font('koverwatch.ttf', 40)
+        self.font2 = load_font('koverwatch.ttf', 20)
+
         self.Mode = 1
         self.Life = 5
         self.Score = 0
@@ -259,8 +272,9 @@ class Muk:
 
     def draw(self):
         self.cur_state.draw(self)
-        #self.font.draw(self.camx - 55, self.camy + 110, '(Mode : %d)' % self.Mode, (255, 0, 0))
-        self.font.draw(1200,840, 'Total Score : %d' % self.Score, (255, 0, 0))
+        self.font2.draw(self.camx - 55, self.camy + 110, 'X : %d' % self.x, (255, 0, 0))
+        self.font2.draw(self.camx - 55, self.camy + 130, 'Y : %d' % self.y, (255, 0, 0))
+        self.font1.draw(1200,840, 'Total Score : %d' % self.Score, (255, 0, 0))
         draw_rectangle(*self.get_bb())
 
     def handle_event(self, event):
