@@ -23,7 +23,7 @@ class Monster1:
         self.frame = (self.frame + Frame_Monster1 * ACTION_PER_TIME * Framework.frame_time) % 8
 
     def get_bb(self):
-        return self.x - 50 - main_state.muk.x / 2, self.y - 75, self.x + 50 - main_state.muk.x / 2, self.y + 75
+        return self.x - 40 - main_state.muk.x / 2, self.y - 75, self.x + 40 - main_state.muk.x / 2, self.y + 50
 
     def draw(self):
         self.image.clip_draw(int(self.frame) * 100, 0 , 100, 150, self.x - main_state.muk.x / 2,self.y)
@@ -31,7 +31,7 @@ class Monster1:
 
 class Brick:
     def __init__(self):
-        self.x = 2000
+        self.x = 3400
         self.y = 0
 
     def update(self):

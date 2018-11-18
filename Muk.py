@@ -10,7 +10,7 @@ RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
-Jump_Height = 10.0
+Jump_Height = 20.0
 
 TIME_PER_ACTION = 1.0
 ACTION_PER_TIME = 1.5
@@ -30,6 +30,8 @@ key_event_table = {
     (SDL_KEYDOWN, SDLK_3): Mode3,
     (SDL_KEYDOWN, SDLK_4): Mode4,
 }
+
+# X와 Cam X 를 구분한 이유 : 카메라는 중심고정 X는 계속 진행이기 때문
 
 class IdleState:
     @staticmethod
@@ -155,22 +157,43 @@ class JumpState:
             muk.jump_frame = (muk.jump_frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 8
             muk.x -= Jump_Height * -math.cos(muk.jump_frame + 1)
             muk.y += muk.velocity * Framework.frame_time * 3
+
+            muk.camx -= Jump_Height * -math.cos(muk.jump_frame + 1)
+            muk.camy += muk.velocity * Framework.frame_time * 3
+
+            if(muk.y > 350 and muk.y < 4200):
+                muk.camy = 350
+
             if(int(muk.jump_frame) == 0):
                 muk.x = 1500
+                muk.camx = 1500
 
         elif muk.Mode == 3:
             muk.jump_frame = (muk.jump_frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 8
             muk.x -= muk.velocity * Framework.frame_time * 2
             muk.y -= Jump_Height * -math.cos(muk.jump_frame + 1)
+
+            muk.camx -= muk.velocity * Framework.frame_time * 2
+            muk.camy -= Jump_Height * -math.cos(muk.jump_frame + 1)
+
+            if(muk.x > 750 and muk.x < 4200): #750 : X중심
+                muk.camx = 750
+
             if(int(muk.jump_frame) == 0):
                 muk.y = 750
+                muk.camy = 750
 
         elif muk.Mode == 4:
             muk.jump_frame = (muk.jump_frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 8
             muk.y -= muk.velocity * Framework.frame_time * 3
             muk.x += Jump_Height * -math.cos(muk.jump_frame + 1)
+
+            muk.camy -= muk.velocity * Framework.frame_time * 3
+            muk.camx += Jump_Height * -math.cos(muk.jump_frame + 1)
+
             if(int(muk.jump_frame) == 0):
                 muk.x = 100
+                muk.camx = 100
                 
         if (int(muk.jump_frame) == 0):
             print("으악")
