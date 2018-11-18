@@ -17,7 +17,7 @@ ACTION_PER_TIME = 1.5
 Frame_Idle = 4
 Frame_Run = 6
 Frame_Jump = 8
-
+Frame_Down = 7
 
 RIGHT_DOWN, RIGHT_UP, SPACE,Mode1,Mode2,Mode3,Mode4 = range(7)
 
@@ -108,7 +108,7 @@ class RunState:
             muk.y += muk.velocity * Framework.frame_time
             muk.camy += muk.velocity * Framework.frame_time
             if (muk.y > 400 and muk.y < 4200): #400 : Y중심
-                muk.camy = 400
+                muk.camy = 350
         elif muk.Mode == 3:
             muk.frame = (muk.frame + Frame_Run * ACTION_PER_TIME * Framework.frame_time) % 6
             muk.x -= muk.velocity * Framework.frame_time
@@ -120,7 +120,7 @@ class RunState:
             muk.y -= muk.velocity * Framework.frame_time
             muk.camy -= muk.velocity * Framework.frame_time
             if (muk.y > 400 and muk.y < 4200): #400 : Y중심
-                muk.camy = 400
+                muk.camy = 350
 
     @staticmethod
     def draw(muk):
@@ -205,7 +205,7 @@ class JumpState:
             if(int(muk.jump_frame) == 0):
                 muk.x = 100
                 muk.camx = 100
-                
+
         if (int(muk.jump_frame) == 0):
             print("으악")
             muk.add_event(RIGHT_DOWN)
@@ -220,6 +220,30 @@ class JumpState:
             muk.Jump_image.clip_composite_draw(int(muk.jump_frame) * 120, 0, 120, 190, 3.141492, '', muk.camx, muk.camy, 120, 190)
         elif muk.Mode == 4:
             muk.Jump_image.clip_composite_draw(int(muk.jump_frame) * 120, 0, 120, 190, -3.141492 / 2, '', muk.camx, muk.camy, 120,190)
+
+class DownState:
+    @staticmethod
+    def enter(muk, event):
+        pass
+
+    @staticmethod
+    def exit(muk, event):
+        pass
+
+    @staticmethod
+    def do(muk):
+        muk.frame = (muk.frame + Frame_Down * ACTION_PER_TIME * Framework.frame_time) % 7
+
+    @staticmethod
+    def draw(muk):
+        if muk.Mode == 1:
+            muk.Idle_image.clip_draw(int(muk.frame) * 100, 0, 100, 200, muk.camx, muk.camy)
+        elif muk.Mode == 2:
+            muk.Idle_image.clip_composite_draw(int(muk.frame) * 100, 0, 100, 200, 3.141492 / 2, '', muk.camx, muk.camy, 100,200)
+        elif muk.Mode == 3:
+            muk.Idle_image.clip_composite_draw(int(muk.frame) * 100, 0, 100, 200, 3.141492, '', muk.camx, muk.camy, 100, 200)
+        elif muk.Mode == 4:
+            muk.Idle_image.clip_composite_draw(int(muk.frame) * 100, 0, 100, 200, -3.141492 / 2, '', muk.camx, muk.camy, 100,200)
 
 
 next_state_table = {
@@ -239,6 +263,7 @@ class Muk:
         self.Idle_image = load_image("Idle.png")
         self.Run_image = load_image("Right_run.png")
         self.Jump_image = load_image("Jump_Right.png")
+        self.Donw_image = load_image("Fall_down.png")
         self.dir = 1
         self.velocity = 0
         self.frame = 0
