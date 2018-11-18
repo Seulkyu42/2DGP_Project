@@ -19,7 +19,7 @@ Frame_Run = 6
 Frame_Jump = 8
 Frame_Down = 7
 
-RIGHT_DOWN, RIGHT_UP, SPACE,Mode1,Mode2,Mode3,Mode4 = range(7)
+RIGHT_DOWN, RIGHT_UP, SPACE,Mode1,Mode2,Mode3,Mode4, Down = range(8)
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_RIGHT): RIGHT_DOWN,
@@ -232,27 +232,38 @@ class DownState:
 
     @staticmethod
     def do(muk):
-        muk.frame = (muk.frame + Frame_Down * ACTION_PER_TIME * Framework.frame_time) % 7
+        if(muk.frame < 8):
+            muk.frame = (muk.frame + Frame_Down * ACTION_PER_TIME * Framework.frame_time / 2)
+            if muk.Mode == 1:
+                muk.x -= 7
+            elif muk.Mode == 2:
+                muk.y -= 7
+            elif muk.Mode == 3:
+                muk.x += 7
+            elif muk.Mode == 4:
+                muk.y += 7
 
     @staticmethod
     def draw(muk):
         if muk.Mode == 1:
-            muk.Idle_image.clip_draw(int(muk.frame) * 100, 0, 100, 200, muk.camx, muk.camy)
+            muk.Down_image.clip_draw(int(muk.frame) * 200, 0, 200, 200, muk.camx, 90)
         elif muk.Mode == 2:
-            muk.Idle_image.clip_composite_draw(int(muk.frame) * 100, 0, 100, 200, 3.141492 / 2, '', muk.camx, muk.camy, 100,200)
+            muk.Down_image.clip_composite_draw(int(muk.frame) * 200, 0, 200, 200, 3.141492 / 2, '', muk.camx, muk.camy, 200,200)
         elif muk.Mode == 3:
-            muk.Idle_image.clip_composite_draw(int(muk.frame) * 100, 0, 100, 200, 3.141492, '', muk.camx, muk.camy, 100, 200)
+            muk.Down_image.clip_composite_draw(int(muk.frame) * 200, 0, 200, 200, 3.141492, '', muk.camx, muk.camy, 200, 200)
         elif muk.Mode == 4:
-            muk.Idle_image.clip_composite_draw(int(muk.frame) * 100, 0, 100, 200, -3.141492 / 2, '', muk.camx, muk.camy, 100,200)
+            muk.Down_image.clip_composite_draw(int(muk.frame) * 200, 0, 200, 200, -3.141492 / 2, '', muk.camx, muk.camy, 200,200)
 
 
 next_state_table = {
     IdleState: {RIGHT_UP: IdleState, RIGHT_DOWN: RunState, SPACE: JumpState,
-                Mode1: IdleState, Mode2: IdleState, Mode3: IdleState, Mode4: IdleState},
+                Mode1: IdleState, Mode2: IdleState, Mode3: IdleState, Mode4: IdleState , Down : DownState},
     RunState: {RIGHT_UP: IdleState, RIGHT_DOWN: IdleState, SPACE: JumpState,
-                Mode1 : RunState,Mode2 : RunState,Mode3 : RunState,Mode4 : RunState},
+                Mode1 : RunState,Mode2 : RunState,Mode3 : RunState,Mode4 : RunState , Down : DownState},
     JumpState: {RIGHT_UP: JumpState, RIGHT_DOWN: RunState, SPACE: JumpState,
-               Mode1: IdleState, Mode2: IdleState, Mode3: IdleState, Mode4: IdleState}
+               Mode1: IdleState, Mode2: IdleState, Mode3: IdleState, Mode4: IdleState , Down : DownState},
+    DownState: {RIGHT_UP: DownState, RIGHT_DOWN: DownState, SPACE: DownState,
+               Mode1: DownState, Mode2: DownState, Mode3: DownState, Mode4: DownState , Down : DownState}
 }
 
 class Muk:
@@ -263,7 +274,7 @@ class Muk:
         self.Idle_image = load_image("Idle.png")
         self.Run_image = load_image("Right_run.png")
         self.Jump_image = load_image("Jump_Right.png")
-        self.Donw_image = load_image("Fall_down.png")
+        self.Down_image = load_image("Fall_down.png")
         self.dir = 1
         self.velocity = 0
         self.frame = 0
@@ -294,6 +305,8 @@ class Muk:
             self.cur_state.exit(self, event)
             self.cur_state = next_state_table[self.cur_state][event]
             self.cur_state.enter(self, event)
+        if(self.Life < 0):
+            self.event_que.insert(0,Down)
 
     def draw(self):
         self.cur_state.draw(self)
