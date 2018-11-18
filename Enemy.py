@@ -26,8 +26,17 @@ class Monster1:
         return self.x - 40 - main_state.muk.x, self.y - 75, self.x + 40 - main_state.muk.x , self.y + 50
 
     def draw(self):
-        self.image.clip_draw(int(self.frame) * 100, 0 , 100, 150, self.x - main_state.muk.x,self.y)
+        if main_state.muk.Mode == 1:
+            self.image.clip_draw(int(self.frame) * 100, 0 , 100, 150, self.x - main_state.muk.x,self.y)
+        elif main_state.muk.Mode == 2:
+            self.image.clip_composite_draw(int(self.frame) * 100, 0, 100,150, 3.141492 / 2, '',self.x,self.y,100,150)
+        elif main_state.muk.Mode == 3:
+            self.image.clip_composite_draw(int(self.frame) * 100, 0, 100,150, 3.141492, '',self.x,self.y,100,150)
+        elif main_state.muk.Mode == 4:
+            self.image.clip_composite_draw(int(self.frame) * 100, 0, 100,150, -3.141492 / 2, '',self.x,self.y,100,150)
+
         draw_rectangle(*self.get_bb())
+
 
 class Brick:
     def __init__(self):
