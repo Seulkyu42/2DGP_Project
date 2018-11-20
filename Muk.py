@@ -10,7 +10,7 @@ RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
-Jump_Height = 20.0
+Jump_Height = 10.0
 
 TIME_PER_ACTION = 1.0
 ACTION_PER_TIME = 1.5
@@ -101,26 +101,30 @@ class RunState:
             muk.frame = (muk.frame + Frame_Run * ACTION_PER_TIME * Framework.frame_time) % 6
             muk.x += muk.velocity * Framework.frame_time
             muk.camx += muk.velocity * Framework.frame_time
-            if(muk.x > 750 and muk.x < 4200): #750 : X중심
+            if(muk.x > 750 and muk.x < 8400): #750 : X중심
                 muk.camx = 750
         elif muk.Mode == 2:
             muk.frame = (muk.frame + Frame_Run * ACTION_PER_TIME * Framework.frame_time) % 6
             muk.y += muk.velocity * Framework.frame_time
             muk.camy += muk.velocity * Framework.frame_time
-            if (muk.y > 400 and muk.y < 4200): #400 : Y중심
+            if (muk.y > 400 and muk.y < 8400): #400 : Y중심
                 muk.camy = 350
         elif muk.Mode == 3:
             muk.frame = (muk.frame + Frame_Run * ACTION_PER_TIME * Framework.frame_time) % 6
             muk.x -= muk.velocity * Framework.frame_time
             muk.camx -= muk.velocity * Framework.frame_time
-            if(muk.x > 750 and muk.x < 4200): #750 : X중심
+            if(muk.x > 750 and muk.x < 8400): #750 : X중심
                 muk.camx = 750
         elif muk.Mode == 4:
             muk.frame = (muk.frame + Frame_Run * ACTION_PER_TIME * Framework.frame_time) % 6
             muk.y -= muk.velocity * Framework.frame_time
             muk.camy -= muk.velocity * Framework.frame_time
-            if (muk.y > 400 and muk.y < 4200): #400 : Y중심
+            if (muk.y > 400 and muk.y < 8400): #400 : Y중심
                 muk.camy = 350
+
+        if muk.Mode == 1 or muk.Mode == 3:
+            muk.x = clamp(0, muk.x, 8600)
+            muk.camx = clamp(0,muk.camx,1550)
 
     @staticmethod
     def draw(muk):
@@ -154,7 +158,7 @@ class JumpState:
             muk.camx += muk.velocity * Framework.frame_time * 2
             muk.camy += Jump_Height * -math.cos(muk.jump_frame + 1)
 
-            if(muk.x > 750 and muk.x < 4200): #750 : X중심
+            if(muk.x > 750 and muk.x < 8400): #750 : X중심
                 muk.camx = 750
 
             if(int(muk.jump_frame) == 0):
@@ -169,7 +173,7 @@ class JumpState:
             muk.camx -= Jump_Height * -math.cos(muk.jump_frame + 1)
             muk.camy += muk.velocity * Framework.frame_time * 3
 
-            if(muk.y > 350 and muk.y < 4200):
+            if(muk.y > 350 and muk.y < 8400):
                 muk.camy = 350
 
             if(int(muk.jump_frame) == 0):
@@ -184,7 +188,7 @@ class JumpState:
             muk.camx -= muk.velocity * Framework.frame_time * 2
             muk.camy -= Jump_Height * -math.cos(muk.jump_frame + 1)
 
-            if(muk.x > 750 and muk.x < 4200): #750 : X중심
+            if(muk.x > 750 and muk.x < 8400): #750 : X중심
                 muk.camx = 750
 
             if(int(muk.jump_frame) == 0):
@@ -199,12 +203,15 @@ class JumpState:
             muk.camy -= muk.velocity * Framework.frame_time * 3
             muk.camx += Jump_Height * -math.cos(muk.jump_frame + 1)
 
-            if(muk.y > 350 and muk.y < 4200):
+            if(muk.y > 350 and muk.y < 8400):
                 muk.camy = 350
 
             if(int(muk.jump_frame) == 0):
                 muk.x = 100
                 muk.camx = 100
+
+        if muk.Mode == 1 or muk.Mode == 3:
+            muk.x = clamp(0, muk.x, 9000)
 
         if (int(muk.jump_frame) == 0):
             print("으악")
