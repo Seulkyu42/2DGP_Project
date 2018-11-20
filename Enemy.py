@@ -47,7 +47,7 @@ class Brick:
         pass
 
     def get_bb(self):
-        return self.x - 10 - main_state.muk.x / 2, self.y,self.x + 10 - main_state.muk.x / 2, self.y + 600
+        return self.x - 10 - main_state.muk.x / 2, self.y,self.x + 10 - main_state.muk.x / 2, self.y + 400
 
     def draw(self):
         draw_rectangle(*self.get_bb())

@@ -82,16 +82,16 @@ def update():
 
     if collide(muk,monster1):
         print("충돌")
-        muk.x -= 100
-        muk.Life -= 1
+        #muk.x -= 100
+        #muk.Life -= 1
         monster1.x = random.randint(0,1600)
         print("Life %d" % muk.Life)
 
 
     if collide(muk,brick):
         print("충돌")
-        muk.x -= 100
-        muk.Life -= 1
+        #muk.x -= 100
+        #muk.Life -= 1
         print("Life %d" % muk.Life)
 
 def draw():

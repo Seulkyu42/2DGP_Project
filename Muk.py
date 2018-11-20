@@ -5,7 +5,7 @@ import os
 os.chdir("C:\\Users\\김민규\\Documents\\Github\\2DGP_Project\\Resources")
 
 PIXEL_PER_METER = (10.0/0.3)
-RUN_SPEED_KMPH = 30.0
+RUN_SPEED_KMPH = 100.0
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -123,7 +123,7 @@ class RunState:
                 muk.camy = 350
 
         if muk.Mode == 1 or muk.Mode == 3:
-            muk.x = clamp(0, muk.x, 8600)
+            muk.x = clamp(0, muk.x, 9000)
             muk.camx = clamp(0,muk.camx,1550)
 
     @staticmethod
@@ -145,7 +145,7 @@ class JumpState:
 
     @staticmethod
     def exit(muk, event):
-        pass
+        muk.velocity -= RUN_SPEED_PPS
 
     @staticmethod
     def do(muk):
@@ -164,6 +164,12 @@ class JumpState:
             if(int(muk.jump_frame) == 0):
                 muk.camy = 90
                 muk.y = 90
+
+            if(muk.x > 8500 and muk.jump_frame > 5):
+                print("되는데??")
+                muk.camx, muk.camy = 1500, 75
+                muk.add_event(Mode2)
+                muk.Mode = 2
 
         elif muk.Mode == 2:
             muk.jump_frame = (muk.jump_frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 8
