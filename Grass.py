@@ -16,11 +16,12 @@ class Grass:
 
     def draw(self):
         for i in range(0,20):
-            self.image.composite_draw(3.14 / 2,'',10150 - main_state.muk.x, 450 + 900 * i - main_state.muk.y)
             if main_state.muk.Mode == 1:
+                self.image.composite_draw(3.14 / 2,'',10150 - main_state.muk.x, 450 + 900 * i - main_state.muk.y)
                 self.image.draw( 1600 * i - main_state.muk.x,400)
-            else:
-                self.image.draw(1600 * i - main_state.muk.x, 490 - main_state.muk.y)
-
+            if main_state.muk.Mode == 2:
+                self.image.composite_draw(3.14 / 2,'',10150 - main_state.muk.x, 450 + 900 * i - main_state.muk.y)
+                self.image.draw( 1600 * i - main_state.muk.x,400)
+                self.image.composite_draw(3.14, '', 1600 * i - main_state.muk.x, 500)
             #self.image.composite_draw(3.14,'',1600 * i - main_state.muk.x,500)
             #self.image.composite_draw(-3.14 / 2,'',400, 450 + 900 * i - main_state.muk.y)
