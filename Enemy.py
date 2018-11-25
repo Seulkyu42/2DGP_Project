@@ -38,16 +38,6 @@ class Monster1:
         draw_rectangle(*self.get_bb())
 
 
-class Brick:
-    def __init__(self):
-        self.x = 3400
-        self.y = 0
-
-    def update(self):
+class Arrow:
+    def __init(self):
         pass
-
-    def get_bb(self):
-        return self.x - 10 - main_state.muk.x / 2, self.y,self.x + 10 - main_state.muk.x / 2, self.y + 400
-
-    def draw(self):
-        draw_rectangle(*self.get_bb())

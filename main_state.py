@@ -9,7 +9,7 @@ import game_world
 from Muk import Muk
 from background import Back
 from Grass import Grass
-from Enemy import Monster1,Brick
+from Enemy import Monster1,Arrow
 from Ui import Life
 from Game_Over import Over
 
@@ -19,7 +19,7 @@ muk = None
 back = None
 grass = None
 monster1 = None
-brick  = None
+arrow = None
 life = None
 over = None
 
@@ -48,11 +48,10 @@ def enter():
     grass = Grass()
     game_world.add_object(grass,0)
 
-    global monster1,brick
+    global monster1,arrow
     monster1 = Monster1()
-    brick = Brick()
     game_world.add_object(monster1, 2)
-    game_world.add_object(brick, 2)
+    #game_world.add_objects(arrow,2)
 
     global life
     life = Life()
@@ -91,12 +90,6 @@ def update():
         monster1.x = random.randint(0,1600)
         print("Life %d" % muk.Life)
 
-
-    if collide(muk,brick):
-        print("충돌")
-        muk.x -= 100
-        muk.Life -= 1
-        print("Life %d" % muk.Life)
 
     if(muk.Life < 1):
         global over

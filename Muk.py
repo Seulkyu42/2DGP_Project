@@ -97,7 +97,6 @@ class RunState:
     @staticmethod
     def do(muk):
         muk.Score += muk.frame / 8
-
         if muk.Mode == 1:
             muk.frame = (muk.frame + Frame_Run * ACTION_PER_TIME * Framework.frame_time) % 6
             muk.x += muk.velocity * Framework.frame_time
@@ -254,14 +253,17 @@ class DownState:
         if(muk.frame < 8):
             muk.frame = (muk.frame + Frame_Down * ACTION_PER_TIME * Framework.frame_time / 2)
             if muk.Mode == 1:
-                muk.x -= 7
+                muk.camx -= 5
+                clamp(0, muk.camx, 9000)
             elif muk.Mode == 2:
-                muk.y -= 7
+                muk.camy -= 5
+                clamp(0, muk.y, 9000)
             elif muk.Mode == 3:
-                muk.x += 7
+                muk.camx += 5
+                clamp(0, muk.camx, 9000)
             elif muk.Mode == 4:
-                muk.y += 7
-
+                muk.camy += 5
+                clamp(0, muk.y, 9000)
 
     @staticmethod
     def draw(muk):
