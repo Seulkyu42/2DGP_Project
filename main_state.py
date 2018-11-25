@@ -11,6 +11,7 @@ from background import Back
 from Grass import Grass
 from Enemy import Monster1,Brick
 from Ui import Life
+from Game_Over import Over
 
 name = "MainState"
 
@@ -20,6 +21,8 @@ grass = None
 monster1 = None
 brick  = None
 life = None
+over = None
+
 
 def collide(a, b):
     left_a, bottom_a, right_a, top_a = a.get_bb()
@@ -55,6 +58,7 @@ def enter():
     life = Life()
     game_world.add_object(life,4)
 
+
 def exit():
     game_world.clear()
 
@@ -82,17 +86,24 @@ def update():
 
     if collide(muk,monster1):
         print("충돌")
-        #muk.x -= 100
-        #muk.Life -= 1
+        muk.x -= 100
+        muk.Life -= 1
         monster1.x = random.randint(0,1600)
         print("Life %d" % muk.Life)
 
 
     if collide(muk,brick):
         print("충돌")
-        #muk.x -= 100
-        #muk.Life -= 1
+        muk.x -= 100
+        muk.Life -= 1
         print("Life %d" % muk.Life)
+
+    if(muk.Life < 1):
+        global over
+        if(over == None):
+            over = Over()
+            game_world.add_object(over, 4)
+
 
 def draw():
     clear_canvas()

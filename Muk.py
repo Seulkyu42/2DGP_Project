@@ -1,11 +1,12 @@
 import Framework
 from pico2d import *
 import os
+import Game_Over
 
 os.chdir("C:\\Users\\김민규\\Documents\\Github\\2DGP_Project\\Resources")
 
 PIXEL_PER_METER = (10.0/0.3)
-RUN_SPEED_KMPH = 100.0
+RUN_SPEED_KMPH = 45.0
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -126,6 +127,10 @@ class RunState:
             muk.x = clamp(0, muk.x, 9000)
             muk.camx = clamp(0,muk.camx,1550)
 
+        if muk.Mode == 2 or muk.Mode == 4:
+            muk.y = clamp(0,muk.y, 9000)
+            muk.camy = clamp(0, muk.camy, 1550)
+
     @staticmethod
     def draw(muk):
         if muk.Mode == 1:
@@ -152,10 +157,10 @@ class JumpState:
         print('%d', muk.jump_frame)
         if muk.Mode == 1:
             muk.jump_frame = (muk.jump_frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 7
-            muk.x += muk.velocity * Framework.frame_time * 2
+            muk.x += muk.velocity * Framework.frame_time
             muk.y += Jump_Height * -math.cos(muk.jump_frame + 1)
 
-            muk.camx += muk.velocity * Framework.frame_time * 2
+            muk.camx += muk.velocity * Framework.frame_time
             muk.camy += Jump_Height * -math.cos(muk.jump_frame + 1)
 
             if(muk.x > 750 and muk.x < 8400): #750 : X중심
@@ -167,6 +172,7 @@ class JumpState:
 
             if(muk.x > 8500 and muk.jump_frame > 5):
                 print("되는데??")
+                muk.x = 9000
                 muk.camx, muk.camy = 1500, 75
                 muk.add_event(Mode2)
                 muk.Mode = 2
@@ -256,6 +262,7 @@ class DownState:
             elif muk.Mode == 4:
                 muk.y += 7
 
+
     @staticmethod
     def draw(muk):
         if muk.Mode == 1:
@@ -296,7 +303,7 @@ class Muk:
         self.font2 = load_font('koverwatch.ttf', 20)
 
         self.Mode = 1
-        self.Life = 5
+        self.Life = 1
         self.Score = 0
         self.event_que = []
         self.cur_state = IdleState
@@ -318,7 +325,7 @@ class Muk:
             self.cur_state.exit(self, event)
             self.cur_state = next_state_table[self.cur_state][event]
             self.cur_state.enter(self, event)
-        if(self.Life < 0):
+        if(self.Life < 1):
             self.event_que.insert(0,Down)
 
     def draw(self):
