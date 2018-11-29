@@ -6,7 +6,7 @@ os.chdir("C:\\Users\\김민규\\Documents\\Github\\2DGP_Project\\Resources")
 
 class Grass:
     def __init__(self):
-        self.image = load_image('Ground_gray.png')
+        self.image = load_image('Ground.png')
 
     def enter(self):
         pass
