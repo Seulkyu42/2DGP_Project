@@ -6,12 +6,12 @@ import Game_Over
 os.chdir("C:\\Users\\김민규\\Documents\\Github\\2DGP_Project\\Resources")
 
 PIXEL_PER_METER = (10.0/0.3)
-RUN_SPEED_KMPH = 45.0
+RUN_SPEED_KMPH = 90.0
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
-Jump_Height = 10.0
+Jump_Height = 15.0
 
 TIME_PER_ACTION = 1.0
 ACTION_PER_TIME = 1.5
@@ -90,7 +90,7 @@ class RunState:
             muk.y += muk.velocity * Framework.frame_time
             muk.camy += muk.velocity * Framework.frame_time
             if (muk.y > 400 and muk.y < 8400): #400 : Y중심
-                muk.camy = 350
+                muk.camy = 400
         elif muk.Mode == 3:
             muk.frame = (muk.frame + Frame_Run * ACTION_PER_TIME * Framework.frame_time) % 6
             muk.x -= muk.velocity * Framework.frame_time
@@ -109,8 +109,8 @@ class RunState:
             muk.camx = clamp(0,muk.camx,1550)
 
         if muk.Mode == 2 or muk.Mode == 4:
-            muk.y = clamp(0,muk.y, 9000)
-            muk.camy = clamp(0, muk.camy, 1550)
+            muk.y = clamp(0, muk.y, 9000)
+            muk.camy = clamp(0, muk.camy, 850)
 
     @staticmethod
     def draw(muk):
@@ -133,10 +133,14 @@ class JumpState:
 
     @staticmethod
     def exit(muk, event):
-        muk.jump_frame = 0
-        if muk.Mode == 1:
-            muk.y = 90
-            muk.camy = 90
+        if (event != SPACE):
+            muk.jump_frame = 0
+            if muk.Mode == 1:
+                muk.y = 90
+                muk.camy = 90
+            if muk.Mode == 2:
+                muk.x = 9500
+                muk.camx = 1500
 
     @staticmethod
     def do(muk):
@@ -158,7 +162,8 @@ class JumpState:
 
             if(muk.x > 8500 and muk.jump_frame > 5):
                 print("되는데??")
-                muk.x = 8500
+                muk.Life += 1
+                muk.x = 9500
                 muk.camx, muk.camy = 1500, 75
                 muk.add_event(Mode2)
                 muk.Mode = 2
@@ -171,12 +176,19 @@ class JumpState:
             muk.camx -= Jump_Height * -math.cos(muk.jump_frame + 1)
             muk.camy += muk.velocity * Framework.frame_time * 3
 
-            if(muk.y > 350 and muk.y < 8400):
-                muk.camy = 350
+            if(muk.y > 400 and muk.y < 8400):
+                muk.camy = 400
 
             if(int(muk.jump_frame) == 0):
-                muk.x = 1500
+                muk.x = 9500
                 muk.camx = 1500
+
+            if (muk.y > 8500 and muk.jump_frame > 5):
+                muk.Life += 1
+                muk.x = 9500
+                muk.camx, muk.camy = 1500, 800
+                muk.add_event(Mode3)
+                muk.Mode = 3
 
         elif muk.Mode == 3:
             muk.jump_frame = (muk.jump_frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 8
@@ -212,8 +224,11 @@ class JumpState:
             muk.x = clamp(0, muk.x, 9000)
 
         if (int(muk.jump_frame) == 0):
-            muk.y = 90
-            muk.add_event(RIGHT_UP)
+            if(muk.Mode == 1):
+                muk.y = 90
+            elif(muk.Mode == 2):
+                muk.x = 9500
+            muk.add_event(RIGHT_DOWN)
 
  # ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -271,7 +286,7 @@ next_state_table = {
                 Mode1: IdleState, Mode2: IdleState, Mode3: IdleState, Mode4: IdleState , Down : DownState},
     RunState: {RIGHT_UP: IdleState, RIGHT_DOWN: IdleState, SPACE: JumpState,
                 Mode1 : RunState,Mode2 : RunState,Mode3 : RunState,Mode4 : RunState , Down : DownState},
-    JumpState: {RIGHT_UP: IdleState, RIGHT_DOWN: RunState, SPACE: JumpState,
+    JumpState: {RIGHT_UP: JumpState, RIGHT_DOWN: RunState, SPACE: JumpState,
                Mode1: IdleState, Mode2: IdleState, Mode3: IdleState, Mode4: IdleState , Down : DownState},
     DownState: {RIGHT_UP: DownState, RIGHT_DOWN: DownState, SPACE: DownState,
                Mode1: DownState, Mode2: DownState, Mode3: DownState, Mode4: DownState , Down : DownState}

@@ -53,8 +53,8 @@ class Hurdle:
     def update(self):
         pass;
     def draw(self):
-        self.image.clip_composite_draw(1,0,200,350,0,'',self.x,self.y,200,350)
+        self.image.clip_composite_draw(1,0,200,350,0,'',self.x - main_state.muk.x ,self.y,200,350)
         draw_rectangle(*self.get_bb())
 
     def get_bb(self):
-        return self.x - 40 - main_state.muk.x, self.y - 350, self.x + 40 - main_state.muk.x , self.y
+        return self.x - 40 - main_state.muk.x, self.y - 350, self.x + 40 - main_state.muk.x , self.y - 100
