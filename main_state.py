@@ -9,7 +9,7 @@ import game_world
 from Muk import Muk
 from background import Back
 from Grass import Grass
-from Enemy import Monster1,Arrow
+from Enemy import Monster1,Arrow,Hurdle
 from Ui import Life
 from Game_Over import Over
 
@@ -22,7 +22,7 @@ monster1 = None
 arrow = None
 life = None
 over = None
-
+hurdle = None
 
 def collide(a, b):
     left_a, bottom_a, right_a, top_a = a.get_bb()
@@ -48,10 +48,12 @@ def enter():
     grass = Grass()
     game_world.add_object(grass,0)
 
-    global monster1,arrow
+    global monster1,arrow,hurdle
     monster1 = Monster1()
     game_world.add_object(monster1, 2)
     #game_world.add_objects(arrow,2)
+    hurdle = Hurdle()
+    game_world.add_object(hurdle,2)
 
     global life
     life = Life()
@@ -79,7 +81,7 @@ def handle_events():
 
 
 def update():
-    global muk,monster1,brick
+    global muk,monster1,brick,hurdle
     for game_object in game_world.all_objects():
         game_object.update()
 
@@ -87,8 +89,14 @@ def update():
         print("충돌")
         muk.x -= 100
         muk.Life -= 1
-        monster1.x = random.randint(0,1600)
-        print("Life %d" % muk.Life)
+        monster1.x = -1000
+        game_world.remove_object(monster1)
+
+    if collide(muk,hurdle):
+        muk.x -= 200
+        hurdle.x = -1000
+        muk.Life -= 1
+
 
 
     if(muk.Life < 1):

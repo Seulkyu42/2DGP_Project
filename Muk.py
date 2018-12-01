@@ -41,9 +41,7 @@ class IdleState:
             muk.velocity += RUN_SPEED_PPS
         elif event == RIGHT_UP:
             muk.velocity -= RUN_SPEED_PPS
-        muk.jump_frame = 0
-        if muk.Mode == 1 or muk.Mode == 3:
-            muk.y = 90
+
 
     @staticmethod
     def exit(muk, event):
@@ -71,28 +69,12 @@ class RunState:
             muk.velocity += RUN_SPEED_PPS
         elif event == RIGHT_UP:
             muk.velocity -= RUN_SPEED_PPS
-        if muk.Mode == 1 or muk.Mode == 3:
-            muk.y = 90
 
 
     @staticmethod
     def exit(muk, event):
-        if event == Mode1:
-            muk.x, muk.y = 100, 75
-            muk.camx, muk.camy = 100, 75
-            muk.Mode = 1
-        elif event == Mode2:
-            muk.x,muk.y = 1500,75
-            muk.camx, muk.camy = 1500, 75
-            muk.Mode = 2
-        elif event == Mode3:
-            muk.x,muk.y = 5000,750
-            muk.camx, muk.camy = 1500, 750
-            muk.Mode = 3
-        elif event == Mode4:
-            muk.x,muk.y = 100,4600
-            muk.camx,muk.camy = 100,750
-            muk.Mode = 4
+        if muk.Mode == 1:
+            muk.y = 90
 
     @staticmethod
     def do(muk):
@@ -141,6 +123,8 @@ class RunState:
         elif muk.Mode == 4:
             muk.Run_image.clip_composite_draw(int(muk.frame) * 110, 0, 110, 200, -3.141492 / 2, '', muk.camx, muk.camy, 110,200)
 
+#///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 class JumpState:
     @staticmethod
     def enter(muk, event):
@@ -149,7 +133,10 @@ class JumpState:
 
     @staticmethod
     def exit(muk, event):
-        muk.velocity -= RUN_SPEED_PPS
+        muk.jump_frame = 0
+        if muk.Mode == 1:
+            muk.y = 90
+            muk.camy = 90
 
     @staticmethod
     def do(muk):
@@ -171,7 +158,7 @@ class JumpState:
 
             if(muk.x > 8500 and muk.jump_frame > 5):
                 print("되는데??")
-                muk.x = 9000
+                muk.x = 8500
                 muk.camx, muk.camy = 1500, 75
                 muk.add_event(Mode2)
                 muk.Mode = 2
@@ -225,8 +212,10 @@ class JumpState:
             muk.x = clamp(0, muk.x, 9000)
 
         if (int(muk.jump_frame) == 0):
-            print("으악")
-            muk.add_event(RIGHT_DOWN)
+            muk.y = 90
+            muk.add_event(RIGHT_UP)
+
+ # ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @staticmethod
     def draw(muk):
@@ -282,7 +271,7 @@ next_state_table = {
                 Mode1: IdleState, Mode2: IdleState, Mode3: IdleState, Mode4: IdleState , Down : DownState},
     RunState: {RIGHT_UP: IdleState, RIGHT_DOWN: IdleState, SPACE: JumpState,
                 Mode1 : RunState,Mode2 : RunState,Mode3 : RunState,Mode4 : RunState , Down : DownState},
-    JumpState: {RIGHT_UP: JumpState, RIGHT_DOWN: RunState, SPACE: JumpState,
+    JumpState: {RIGHT_UP: IdleState, RIGHT_DOWN: RunState, SPACE: JumpState,
                Mode1: IdleState, Mode2: IdleState, Mode3: IdleState, Mode4: IdleState , Down : DownState},
     DownState: {RIGHT_UP: DownState, RIGHT_DOWN: DownState, SPACE: DownState,
                Mode1: DownState, Mode2: DownState, Mode3: DownState, Mode4: DownState , Down : DownState}

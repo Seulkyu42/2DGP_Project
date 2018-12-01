@@ -41,3 +41,20 @@ class Monster1:
 class Arrow:
     def __init(self):
         pass
+
+class Hurdle:
+    image = None
+    def __init__(self):
+        if Hurdle.image == None:
+            Hurdle.image = load_image('Hurdle1.png')
+        self.x,self.y = random.randint(0,1600), 350
+        self.frame = 0
+
+    def update(self):
+        pass;
+    def draw(self):
+        self.image.clip_composite_draw(1,0,200,350,0,'',self.x,self.y,200,350)
+        draw_rectangle(*self.get_bb())
+
+    def get_bb(self):
+        return self.x - 40 - main_state.muk.x, self.y - 350, self.x + 40 - main_state.muk.x , self.y

@@ -12,5 +12,5 @@ class Back:
         pass
 
     def draw(self):
-        for i in range(0, 2):
-            self.image.draw(-2500 + 5000 * i, 1000)
+        self.image.draw(800,450)
+
