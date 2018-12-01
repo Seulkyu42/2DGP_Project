@@ -305,7 +305,7 @@ class Muk:
         self.font2 = load_font('koverwatch.ttf', 20)
 
         self.Mode = 1
-        self.Life = 1
+        self.Life = 5
         self.Score = 0
         self.event_que = []
         self.cur_state = IdleState
