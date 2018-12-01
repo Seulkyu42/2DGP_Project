@@ -9,7 +9,7 @@ import game_world
 from Muk import Muk
 from background import Back
 from Grass import Grass
-from Enemy import Monster1,Arrow,Hurdle
+from Enemy import Monster1,Arrow,Hurdle_Up,Hurdle_Down
 from Ui import Life
 from Game_Over import Over
 
@@ -22,7 +22,10 @@ monster1 = None
 arrow = None
 life = None
 over = None
-hurdle = None
+hurdle_up = []
+hurdle_down = []
+
+j = 0
 
 def collide(a, b):
     left_a, bottom_a, right_a, top_a = a.get_bb()
@@ -48,16 +51,31 @@ def enter():
     grass = Grass()
     game_world.add_object(grass,0)
 
-    global monster1,arrow,hurdle
+    global monster1,arrow,hurdle_up,hurdle_down
     monster1 = Monster1()
     game_world.add_object(monster1, 2)
-    #game_world.add_objects(arrow,2)
-    hurdle = Hurdle()
-    game_world.add_object(hurdle,2)
+
+    j = 1
+    hurdle_up = [Hurdle_Up() for i in range(10)]
+    for i in hurdle_up:
+        i.x += 700 * j
+        j += 1
+        game_world.add_object(i, 2)
+
+    k = 1
+    hurdle_down = [Hurdle_Down() for i in range(10)]
+    for i in hurdle_down:
+        i.x += 700 * k
+        k += 1
+        game_world.add_object(i,2)
+
 
     global life
     life = Life()
     game_world.add_object(life,4)
+
+    global over
+    over = Over()
 
 
 def exit():
@@ -75,34 +93,54 @@ def handle_events():
         if event.type == SDL_QUIT:
             Framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-                Framework.quit()
+            Framework.quit()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_r:
+            global j
+            exit()
+            j = 0
+            game_world.objects = [[],[],[],[],[]]
+            enter()
+            update()
         else:
             muk.handle_event(event)
 
-
 def update():
-    global muk,monster1,brick,hurdle
+    global muk,monster1,brick,hurdle_up,hurdle_down
     for game_object in game_world.all_objects():
         game_object.update()
 
     if collide(muk,monster1):
+        muk.Damage_cnt = 1
         print("충돌")
         muk.x -= 100
         muk.Life -= 1
-        monster1.x = -1000
-        game_world.remove_object(monster1)
+        monster1.cnt_frame = 7
 
-    if collide(muk,hurdle):
-        muk.x -= 200
-        hurdle.x = -1000
-        muk.Life -= 1
+        #game_world.remove_object(monster1)
 
-
+    for ups in hurdle_up:
+        for downs in hurdle_down:
+            if collide(muk, ups):
+                muk.Damage_cnt = 1
+                muk.x -= 200
+                hurdle_up.remove(ups)
+                hurdle_down.remove(downs)
+                game_world.remove_object(ups)
+                game_world.remove_object(downs)
+                muk.Life -= 1
+            elif collide(muk, downs):
+                muk.Damage_cnt = 1
+                muk.x -= 200
+                hurdle_up.remove(ups)
+                hurdle_down.remove(downs)
+                game_world.remove_object(ups)
+                game_world.remove_object(downs)
+                muk.Life -= 1
 
     if(muk.Life < 1):
-        global over
-        if(over == None):
-            over = Over()
+        global j
+        j += 1
+        if(j == 1):
             game_world.add_object(over, 4)
 
 

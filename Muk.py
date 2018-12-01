@@ -6,12 +6,12 @@ import Game_Over
 os.chdir("C:\\Users\\김민규\\Documents\\Github\\2DGP_Project\\Resources")
 
 PIXEL_PER_METER = (10.0/0.3)
-RUN_SPEED_KMPH = 90.0
+RUN_SPEED_KMPH = 45.0
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
-Jump_Height = 15.0
+Jump_Height = 20.0
 
 TIME_PER_ACTION = 1.0
 ACTION_PER_TIME = 1.5
@@ -144,10 +144,11 @@ class JumpState:
 
     @staticmethod
     def do(muk):
+        muk.Score += muk.frame / 8
         print('%d', muk.jump_frame)
         if muk.Mode == 1:
             muk.jump_frame = (muk.jump_frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 7
-            muk.x += muk.velocity * Framework.frame_time
+            muk.x += muk.velocity * Framework.frame_time * 2
             muk.y += Jump_Height * -math.cos(muk.jump_frame + 1)
 
             muk.camx += muk.velocity * Framework.frame_time
@@ -176,7 +177,7 @@ class JumpState:
             muk.camx -= Jump_Height * -math.cos(muk.jump_frame + 1)
             muk.camy += muk.velocity * Framework.frame_time * 3
 
-            if(muk.y > 400 and muk.y < 8400):
+            if(muk.y > 400 and muk.y < 8600):
                 muk.camy = 400
 
             if(int(muk.jump_frame) == 0):
@@ -204,6 +205,13 @@ class JumpState:
             if(int(muk.jump_frame) == 0):
                 muk.y = 750
                 muk.camy = 750
+
+            if (muk.x < 200 and muk.jump_frame > 5):
+                muk.Life += 1
+                muk.x = 0
+                muk.camx, muk.camy = 90, 1500
+                muk.add_event(Mode4)
+                muk.Mode = 4
 
         elif muk.Mode == 4:
             muk.jump_frame = (muk.jump_frame + Frame_Jump * ACTION_PER_TIME * Framework.frame_time) % 8
@@ -257,17 +265,19 @@ class DownState:
         if(muk.frame < 8):
             muk.frame = (muk.frame + Frame_Down * ACTION_PER_TIME * Framework.frame_time / 2)
             if muk.Mode == 1:
-                muk.camx -= 5
+                muk.x -= 5
                 clamp(0, muk.camx, 9000)
             elif muk.Mode == 2:
-                muk.camy -= 5
+                muk.y -= 5
                 clamp(0, muk.y, 9000)
             elif muk.Mode == 3:
-                muk.camx += 5
+                muk.x += 5
                 clamp(0, muk.camx, 9000)
             elif muk.Mode == 4:
-                muk.camy += 5
+                muk.y += 5
                 clamp(0, muk.y, 9000)
+        if muk.ui_cnt == 99:
+            muk.add_event(Mode4)
 
     @staticmethod
     def draw(muk):
@@ -289,7 +299,7 @@ next_state_table = {
     JumpState: {RIGHT_UP: JumpState, RIGHT_DOWN: RunState, SPACE: JumpState,
                Mode1: IdleState, Mode2: IdleState, Mode3: IdleState, Mode4: IdleState , Down : DownState},
     DownState: {RIGHT_UP: DownState, RIGHT_DOWN: DownState, SPACE: DownState,
-               Mode1: DownState, Mode2: DownState, Mode3: DownState, Mode4: DownState , Down : DownState}
+               Mode1: DownState, Mode2: DownState, Mode3: DownState, Mode4: IdleState , Down : DownState}
 }
 
 class Muk:
@@ -307,13 +317,15 @@ class Muk:
         self.jump_frame = 0
         self.font1 = load_font('koverwatch.ttf', 40)
         self.font2 = load_font('koverwatch.ttf', 20)
-
+        self.Damage_image = load_image("Damaged.png")
+        self.Damage_cnt = 0
         self.Mode = 1
         self.Life = 5
         self.Score = 0
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
+        self.ui_cnt = 0
 
     def get_bb(self):
         if self.Mode == 1 or self.Mode == 3:
@@ -331,6 +343,7 @@ class Muk:
             self.cur_state.exit(self, event)
             self.cur_state = next_state_table[self.cur_state][event]
             self.cur_state.enter(self, event)
+
         if(self.Life < 1):
             self.event_que.insert(0,Down)
 
@@ -339,7 +352,15 @@ class Muk:
         self.font2.draw(self.camx - 55, self.camy + 110, 'X : %d' % self.x, (255, 0, 0))
         self.font2.draw(self.camx - 55, self.camy + 130, 'Y : %d' % self.y, (255, 0, 0))
         self.font1.draw(1200,840, 'Total Score : %d' % self.Score, (255, 0, 0))
-        draw_rectangle(*self.get_bb())
+
+        if (self.Damage_cnt == 1):
+            if(self.ui_cnt == 0):
+                self.event_que.insert(0,Down)
+            self.ui_cnt += 1
+            self.Damage_image.draw(self.camx-20,self.camy + 100,50,50)
+            if(self.ui_cnt == 200):
+                self.ui_cnt = 0
+                self.Damage_cnt = 0
 
     def handle_event(self, event):
         if (event.type, event.key) in key_event_table:
