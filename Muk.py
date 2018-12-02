@@ -160,7 +160,7 @@ class JumpState:
                 muk.camy = 90
                 muk.y = 90
 
-            if(muk.x > 8500 and muk.jump_frame > 5):
+            if(muk.x > 8800 and muk.jump_frame > 5):
                 print("되는데??")
                 muk.Life += 1
                 muk.x = 9500
@@ -227,6 +227,14 @@ class JumpState:
             if(int(muk.jump_frame) == 0):
                 muk.x = 100
                 muk.camx = 100
+
+            if (muk.y < 300 and muk.jump_frame > 5):
+                muk.Life += 1
+                muk.x = 0
+                muk.camx, muk.camy = 0, 90
+                muk.final = 1
+                muk.add_event(Mode1)
+                muk.Mode = 1
 
         if muk.Mode == 1 or muk.Mode == 3:
             muk.x = clamp(0, muk.x, 9000)
@@ -326,6 +334,7 @@ class Muk:
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
         self.ui_cnt = 0
+        self.final = 0
 
     def get_bb(self):
         if self.Mode == 1 or self.Mode == 3:

@@ -9,9 +9,9 @@ import game_world
 from Muk import Muk
 from background import Back
 from Grass import Grass
-from Enemy import Monster1,Arrow,Hurdle_Up,Hurdle_Down,Box_Up,Thorn_Up
+from Enemy import Monster1,Arrow,Hurdle_Up,Hurdle_Down,Box_Up,Thorn_Up,Boss
 from Ui import Life
-from Game_Over import Over
+from Game_Over import Over,Clear,Start
 
 name = "MainState"
 
@@ -22,10 +22,13 @@ monster1 = None
 arrow = None
 life = None
 over = None
+clear = None
+statr = None
 hurdle_up = []
 hurdle_down = []
 box_up = []
 thron =[]
+boss = None
 
 j = 0
 
@@ -93,6 +96,10 @@ def enter():
         game_world.add_object(i, 2)
     #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    global boss
+    boss = Boss()
+    game_world.add_object(boss,2)
+
     global life
     life = Life()
     game_world.add_object(life,4)
@@ -100,6 +107,12 @@ def enter():
     global over
     over = Over()
 
+    global clear
+    clear = Clear()
+
+    global start
+    start = Start()
+    game_world.add_object(start,4)
 
 def exit():
     game_world.clear()
@@ -117,6 +130,13 @@ def handle_events():
             Framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             Framework.quit()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_n:
+            exit()
+            game_world.objects = [[],[],[],[],[]]
+            enter()
+            update()
+            start.switch = 0
+
         elif event.type == SDL_KEYDOWN and event.key == SDLK_r:
             global j
             exit()
@@ -128,11 +148,13 @@ def handle_events():
             muk.handle_event(event)
 
 def update():
+
     global muk,monster1,brick,hurdle_up,hurdle_down
     for game_object in game_world.all_objects():
         game_object.update()
 
     if collide(muk,monster1):
+        muk.Score -= 100
         muk.Damage_cnt = 1
         print("충돌")
         if(muk.Mode == 1):
@@ -144,11 +166,12 @@ def update():
 
         #game_world.remove_object(monster1)
 
-    if (muk.Mode == 1):
+    if (muk.Mode == 1 and muk.final == 0):
         for ups in hurdle_up:
             for downs in hurdle_down:
                 if collide(muk, ups):
                     muk.Damage_cnt = 1
+                    muk.Score -= 100
                     muk.x -= 200
                     hurdle_up.remove(ups)
                     hurdle_down.remove(downs)
@@ -157,6 +180,7 @@ def update():
                     muk.Life -= 1
                 elif collide(muk, downs):
                     muk.Damage_cnt = 1
+                    muk.Score -= 100
                     muk.x -= 200
                     hurdle_up.remove(ups)
                     hurdle_down.remove(downs)
@@ -167,6 +191,7 @@ def update():
     elif (muk.Mode == 2):
         for ups in box_up:
             if collide(muk, ups):
+                muk.Score -= 100
                 muk.Damage_cnt = 1
                 muk.y -= 200
                 box_up.remove(ups)
@@ -178,13 +203,20 @@ def update():
             if collide(muk, ups):
                 muk.Damage_cnt = 1
                 muk.x += 200
+                muk.Score -= 100
                 thron.remove(ups)
                 game_world.remove_object(ups)
                 muk.Life -= 1
 
+    global boss
+    global j
+
+    if(boss.cnt_frame_boss == 4):
+        j += 1
+        if(j == 1):
+            game_world.add_object(clear,4)
 
     if(muk.Life < 1):
-        global j
         j += 1
         if(j == 1):
             game_world.add_object(over, 4)

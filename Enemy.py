@@ -41,13 +41,13 @@ class Monster1:
 
 
     def get_bb(self):
-        if main_state.muk.Mode == 1:
+        if main_state.muk.Mode == 1 and main_state.muk.final == 0:
             return self.x - 40 - main_state.muk.x, self.y - 75, self.x + 40 - main_state.muk.x , self.y + 50
         else:
             return 9000 - 40 - main_state.muk.x, 800 - 75, 9000 + 40 - main_state.muk.x, 800 + 50
 
     def draw(self):
-        if main_state.muk.Mode == 1:
+        if main_state.muk.Mode == 1 and main_state.muk.final == 0 and main_state.start.switch == 0:
             self.text.clip_draw(0,500 - self.cnt_frame1 * 50,200,50, 100 + self.x-main_state.muk.x,self.y + 75)
             self.image.clip_draw(int(self.frame) * 100, 0 , 100, 150, self.x - main_state.muk.x,self.y)
         if main_state.muk.Mode == 3:
@@ -73,12 +73,12 @@ class Hurdle_Up:
     def update(self):
         pass;
     def draw(self):
-        if (main_state.muk.Mode == 1):
+        if (main_state.muk.Mode == 1and main_state.muk.final == 0):
             self.image.clip_composite_draw(1,0,200,350,0,'',self.x - main_state.muk.x ,self.y,200,350)
         # draw_rectangle(*self.get_bb())
 
     def get_bb(self):
-        if (main_state.muk.Mode == 1):
+        if (main_state.muk.Mode == 1and main_state.muk.final == 0):
             return self.x - 5 - main_state.muk.x, self.y - 350, self.x + 5 - main_state.muk.x , self.y - 200
 
 class Hurdle_Down:
@@ -93,7 +93,7 @@ class Hurdle_Down:
         #draw_rectangle(*self.get_bb())
 
     def get_bb(self):
-        if(main_state.muk.Mode == 1):
+        if(main_state.muk.Mode == 1and main_state.muk.final == 0):
             return self.x - 5 - main_state.muk.x, self.y + 30, self.x + 5 - main_state.muk.x , self.y + 1000
 
 class Box_Up:
@@ -143,3 +143,40 @@ class Thorn_Up:
     def get_bb(self):
         #if (main_state.muk.Mode == 3):
         return self.x - 20 -main_state.muk.x, self.y - 75, self.x + 20-main_state.muk.x, self.y + 100
+
+class Boss:
+    image1 = None
+    text1 = None
+    def __init__(self):
+        if Boss.image1 == None:
+            Boss.image1 = load_image('Monster1.png')
+        if Boss.text1 == None:
+            Boss.text1 = load_image('Text1.png')
+        self.x, self.y = 1200, 50
+        self.frame = 0
+        self.count = 0
+        self.size = 1
+        self.cnt_frame_boss = 0
+
+    def update(self):
+        self.frame = (self.frame + Frame_Monster1 * ACTION_PER_TIME * Framework.frame_time) % 8
+        if (main_state.muk.Mode == 1 and main_state.muk.final == 1):
+            self.count += 1
+            if (self.count == 350 and self.cnt_frame_boss < 4):
+                self.cnt_frame_boss += 1
+                self.count = 0
+            if self.cnt_frame_boss == 2:
+                self.size += 0.01
+            elif self.cnt_frame_boss == 3:
+                self.size -= 0.01
+
+
+
+
+    def get_bb(self):
+        pass
+
+    def draw(self):
+        if (main_state.muk.Mode == 1 and main_state.muk.final == 1):
+            self.text1.clip_composite_draw(0,200 - self.cnt_frame_boss * 50,200,50,0,'',self.x - main_state.muk.x+75,self.y+ 20+ 100 * self.size,200,50)
+            self.image1.clip_composite_draw(int(self.frame) * 100, 0, 100, 150,0,'', self.x - main_state.muk.x, self.y + 50 * self.size, 100* self.size, 150* self.size)
