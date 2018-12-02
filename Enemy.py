@@ -44,7 +44,8 @@ class Monster1:
         if main_state.muk.Mode == 1:
             return self.x - 40 - main_state.muk.x, self.y - 75, self.x + 40 - main_state.muk.x , self.y + 50
         else:
-            return 8500 - 40 - main_state.muk.x, 800 - 75, 9000 + 40 - main_state.muk.x, 800 + 50
+            return 9000 - 40 - main_state.muk.x, 800 - 75, 9000 + 40 - main_state.muk.x, 800 + 50
+
     def draw(self):
         if main_state.muk.Mode == 1:
             self.text.clip_draw(0,500 - self.cnt_frame1 * 50,200,50, 100 + self.x-main_state.muk.x,self.y + 75)
@@ -118,3 +119,27 @@ class Box_Up:
     def get_bb(self):
         if (main_state.muk.Mode == 2):
             return self.x , self.y - main_state.muk.y - 30, self.x + 150, self.y - main_state.muk.y + 30
+
+class Thorn_Up:
+
+    image = None
+    Dx, Dy = 0, 0
+
+    def __init__(self):
+        if Thorn_Up.image == None:
+            Thorn_Up.image = load_image('Hurdle3.png')
+        self.x, self.y = 8000, 800
+        Thorn_Up.Dx = self.x
+        Thorn_Up.Dy = self.y
+
+    def update(self):
+        pass;
+
+    def draw(self):
+        if (main_state.muk.Mode == 3):
+            self.image.clip_draw(1, 0, 200, 350, self.x - main_state.muk.x , self.y, 200, 350)
+            draw_rectangle(*self.get_bb())
+
+    def get_bb(self):
+        #if (main_state.muk.Mode == 3):
+        return self.x - 20 -main_state.muk.x, self.y - 75, self.x + 20-main_state.muk.x, self.y + 100

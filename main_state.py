@@ -9,7 +9,7 @@ import game_world
 from Muk import Muk
 from background import Back
 from Grass import Grass
-from Enemy import Monster1,Arrow,Hurdle_Up,Hurdle_Down,Box_Up
+from Enemy import Monster1,Arrow,Hurdle_Up,Hurdle_Down,Box_Up,Thorn_Up
 from Ui import Life
 from Game_Over import Over
 
@@ -25,6 +25,7 @@ over = None
 hurdle_up = []
 hurdle_down = []
 box_up = []
+thron =[]
 
 j = 0
 
@@ -79,6 +80,16 @@ def enter():
             i.x -= 200
         i.y += 700 * o3
         o3 += 1
+        game_world.add_object(i, 2)
+    #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    global thron
+    o4 = 1
+    thron = [Thorn_Up() for i in range(9)]
+    for i in thron:
+        if(o4 % 2 == 0):
+            i.y -= 100
+        i.x -= 700 * o4
+        o4 += 1
         game_world.add_object(i, 2)
     #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -162,6 +173,14 @@ def update():
                 game_world.remove_object(ups)
                 muk.Life -= 1
 
+    elif (muk.Mode == 3):
+        for ups in thron:
+            if collide(muk, ups):
+                muk.Damage_cnt = 1
+                muk.x += 200
+                thron.remove(ups)
+                game_world.remove_object(ups)
+                muk.Life -= 1
 
 
     if(muk.Life < 1):

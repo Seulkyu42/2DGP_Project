@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="0b7899c9-ecc5-44b3-a91a-e2c20f9a2671" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/Enemy.py" beforeDir="false" afterPath="$PROJECT_DIR$/Enemy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Grass.py" beforeDir="false" afterPath="$PROJECT_DIR$/Grass.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Muk.py" beforeDir="false" afterPath="$PROJECT_DIR$/Muk.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resources/Text.png" beforeDir="false" afterPath="$PROJECT_DIR$/Resources/Text.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_state.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -61,12 +59,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="10730" />
+          <entry key="py" value="10982" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="10730" />
+          <entry key="Python" value="10982" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -89,11 +87,12 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main_state.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="282">
-              <caret line="129" column="24" selection-start-line="129" selection-start-column="24" selection-end-line="129" selection-end-column="24" />
+            <state relative-caret-position="260">
+              <caret line="86" column="40" selection-start-line="86" selection-start-column="40" selection-end-line="86" selection-end-column="40" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
                 <element signature="e#2427#3158#0" />
+                <element signature="e#3804#4031#0" />
               </folding>
             </state>
           </provider>
@@ -102,7 +101,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Grass.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
+            <state relative-caret-position="437">
               <caret line="23" column="66" selection-start-line="23" selection-start-column="66" selection-end-line="23" selection-end-column="66" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
@@ -112,35 +111,37 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Enemy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="348">
-              <caret line="41" lean-forward="true" selection-start-line="41" selection-end-line="41" />
+            <state relative-caret-position="386">
+              <caret line="144" column="57" selection-start-line="144" selection-start-column="57" selection-end-line="144" selection-end-column="57" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
-                <marker date="1543737786798" expanded="true" signature="2768:2773" ph="..." />
-                <marker date="1543737786798" expanded="true" signature="2926:2972" ph="..." />
-                <marker date="1543737786798" expanded="true" signature="3152:3153" ph="..." />
+                <element signature="e#255#1910#0" />
+                <element signature="e#1356#1985#0" />
+                <element signature="e#2777#3140#0" />
+                <element signature="e#3165#3822#0" />
+                <marker date="1543742819522" expanded="true" signature="2769:2774" ph="..." />
+                <marker date="1543742819522" expanded="true" signature="2927:2973" ph="..." />
+                <marker date="1543742819522" expanded="true" signature="3153:3154" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Muk.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="466">
-              <caret line="141" column="28" lean-forward="true" selection-start-line="141" selection-start-column="28" selection-end-line="141" selection-end-column="28" />
+            <state relative-caret-position="177">
+              <caret line="348" lean-forward="true" selection-start-line="348" selection-end-line="348" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
-                <element signature="e#1981#5061#0" />
-                <element signature="e#3889#4175#0" />
-                <marker date="1543736382895" expanded="true" signature="1103:1122" ph="..." />
-                <marker date="1543736382895" expanded="true" signature="2123:2178" ph="..." />
-                <marker date="1543736382895" expanded="true" signature="5070:5075" ph="..." />
-                <marker date="1543736382895" expanded="true" signature="9391:10740" ph="..." />
-                <marker date="1543736382895" expanded="true" signature="9436:9455" ph="..." />
+                <marker date="1543742931647" expanded="true" signature="1103:1122" ph="..." />
+                <marker date="1543742931647" expanded="true" signature="2012:2031" ph="..." />
+                <marker date="1543742931647" expanded="true" signature="5013:5018" ph="..." />
+                <marker date="1543742931647" expanded="true" signature="9334:10683" ph="..." />
+                <marker date="1543742931647" expanded="true" signature="9379:9398" ph="..." />
               </folding>
             </state>
           </provider>
@@ -179,9 +180,9 @@
         <option value="$PROJECT_DIR$/background.py" />
         <option value="$PROJECT_DIR$/Game_Over.py" />
         <option value="$PROJECT_DIR$/Grass.py" />
-        <option value="$PROJECT_DIR$/Muk.py" />
         <option value="$PROJECT_DIR$/main_state.py" />
         <option value="$PROJECT_DIR$/Enemy.py" />
+        <option value="$PROJECT_DIR$/Muk.py" />
       </list>
     </option>
   </component>
@@ -470,17 +471,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Grass.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="23" column="66" selection-start-line="23" selection-start-column="66" selection-end-line="23" selection-end-column="66" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
-            <marker date="1543723418968" expanded="true" signature="226:245" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Game_Over.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="329">
@@ -492,43 +482,57 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main_state.py">
+    <entry file="file://$PROJECT_DIR$/Grass.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="282">
-          <caret line="129" column="24" selection-start-line="129" selection-start-column="24" selection-end-line="129" selection-end-column="24" />
+        <state relative-caret-position="437">
+          <caret line="23" column="66" selection-start-line="23" selection-start-column="66" selection-end-line="23" selection-end-column="66" />
           <folding>
-            <element signature="e#0#13#0" expanded="true" />
-            <element signature="e#2427#3158#0" />
+            <element signature="e#0#20#0" expanded="true" />
+            <marker date="1543723418968" expanded="true" signature="226:245" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Muk.py">
+    <entry file="file://$PROJECT_DIR$/main_state.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="466">
-          <caret line="141" column="28" lean-forward="true" selection-start-line="141" selection-start-column="28" selection-end-line="141" selection-end-column="28" />
+        <state relative-caret-position="260">
+          <caret line="86" column="40" selection-start-line="86" selection-start-column="40" selection-end-line="86" selection-end-column="40" />
           <folding>
-            <element signature="e#0#16#0" expanded="true" />
-            <element signature="e#1981#5061#0" />
-            <element signature="e#3889#4175#0" />
-            <marker date="1543736382895" expanded="true" signature="1103:1122" ph="..." />
-            <marker date="1543736382895" expanded="true" signature="2123:2178" ph="..." />
-            <marker date="1543736382895" expanded="true" signature="5070:5075" ph="..." />
-            <marker date="1543736382895" expanded="true" signature="9391:10740" ph="..." />
-            <marker date="1543736382895" expanded="true" signature="9436:9455" ph="..." />
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#2427#3158#0" />
+            <element signature="e#3804#4031#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Enemy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="348">
-          <caret line="41" lean-forward="true" selection-start-line="41" selection-end-line="41" />
+        <state relative-caret-position="386">
+          <caret line="144" column="57" selection-start-line="144" selection-start-column="57" selection-end-line="144" selection-end-column="57" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
-            <marker date="1543737786798" expanded="true" signature="2768:2773" ph="..." />
-            <marker date="1543737786798" expanded="true" signature="2926:2972" ph="..." />
-            <marker date="1543737786798" expanded="true" signature="3152:3153" ph="..." />
+            <element signature="e#255#1910#0" />
+            <element signature="e#1356#1985#0" />
+            <element signature="e#2777#3140#0" />
+            <element signature="e#3165#3822#0" />
+            <marker date="1543742819522" expanded="true" signature="2769:2774" ph="..." />
+            <marker date="1543742819522" expanded="true" signature="2927:2973" ph="..." />
+            <marker date="1543742819522" expanded="true" signature="3153:3154" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Muk.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="348" lean-forward="true" selection-start-line="348" selection-end-line="348" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+            <marker date="1543742931647" expanded="true" signature="1103:1122" ph="..." />
+            <marker date="1543742931647" expanded="true" signature="2012:2031" ph="..." />
+            <marker date="1543742931647" expanded="true" signature="5013:5018" ph="..." />
+            <marker date="1543742931647" expanded="true" signature="9334:10683" ph="..." />
+            <marker date="1543742931647" expanded="true" signature="9379:9398" ph="..." />
           </folding>
         </state>
       </provider>

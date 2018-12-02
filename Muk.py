@@ -6,7 +6,7 @@ import Game_Over
 os.chdir("C:\\Users\\김민규\\Documents\\Github\\2DGP_Project\\Resources")
 
 PIXEL_PER_METER = (10.0/0.3)
-RUN_SPEED_KMPH = 45.0
+RUN_SPEED_KMPH = 50.0
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -65,16 +65,12 @@ class IdleState:
 class RunState:
     @staticmethod
     def enter(muk, event):
-        if event == RIGHT_DOWN:
-            muk.velocity += RUN_SPEED_PPS
-        elif event == RIGHT_UP:
-            muk.velocity -= RUN_SPEED_PPS
+        muk.velocity = RUN_SPEED_PPS
 
 
     @staticmethod
     def exit(muk, event):
-        if muk.Mode == 1:
-            muk.y = 90
+        pass
 
     @staticmethod
     def do(muk):
@@ -102,7 +98,7 @@ class RunState:
             muk.y -= muk.velocity * Framework.frame_time
             muk.camy -= muk.velocity * Framework.frame_time
             if (muk.y > 400 and muk.y < 8400): #400 : Y중심
-                muk.camy = 350
+                muk.camy = 450
 
         if muk.Mode == 1 or muk.Mode == 3:
             muk.x = clamp(0, muk.x, 9000)
@@ -141,6 +137,9 @@ class JumpState:
             if muk.Mode == 2:
                 muk.x = 9500
                 muk.camx = 1500
+            if muk.Mode == 3:
+                muk.y = 9500
+                muk.camy = 800
 
     @staticmethod
     def do(muk):
@@ -223,7 +222,7 @@ class JumpState:
             muk.camx += Jump_Height * -math.cos(muk.jump_frame + 1)
 
             if(muk.y > 350 and muk.y < 8400):
-                muk.camy = 350
+                muk.camy = 450
 
             if(int(muk.jump_frame) == 0):
                 muk.x = 100
@@ -266,16 +265,16 @@ class DownState:
         if(muk.frame < 8):
             muk.frame = (muk.frame + Frame_Down * ACTION_PER_TIME * Framework.frame_time / 2)
             if muk.Mode == 1:
-                muk.x -= 5
+                muk.x -= 3
                 clamp(0, muk.camx, 9000)
             elif muk.Mode == 2:
-                muk.y -= 5
+                muk.y -= 3
                 clamp(0, muk.y, 9000)
             elif muk.Mode == 3:
-                muk.x += 5
+                muk.x += 3
                 clamp(0, muk.camx, 9000)
             elif muk.Mode == 4:
-                muk.y += 5
+                muk.y += 3
                 clamp(0, muk.y, 9000)
         if muk.ui_cnt == 99:
             muk.add_event(Mode4)
@@ -350,8 +349,8 @@ class Muk:
 
     def draw(self):
         self.cur_state.draw(self)
-        self.font2.draw(self.camx - 55, self.camy + 110, 'X : %d' % self.x, (255, 0, 0))
-        self.font2.draw(self.camx - 55, self.camy + 130, 'Y : %d' % self.y, (255, 0, 0))
+        #self.font2.draw(self.camx - 55, self.camy + 110, 'X : %d' % self.x, (255, 0, 0))
+        #self.font2.draw(self.camx - 55, self.camy + 130, 'Y : %d' % self.y, (255, 0, 0))
         self.font1.draw(1200,840, 'Total Score : %d' % self.Score, (255, 0, 0))
 
         if (self.Damage_cnt == 1):
