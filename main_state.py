@@ -9,7 +9,7 @@ import game_world
 from Muk import Muk
 from background import Back
 from Grass import Grass
-from Enemy import Monster1,Arrow,Hurdle_Up,Hurdle_Down
+from Enemy import Monster1,Arrow,Hurdle_Up,Hurdle_Down,Box_Up
 from Ui import Life
 from Game_Over import Over
 
@@ -24,6 +24,7 @@ life = None
 over = None
 hurdle_up = []
 hurdle_down = []
+box_up = []
 
 j = 0
 
@@ -55,20 +56,31 @@ def enter():
     monster1 = Monster1()
     game_world.add_object(monster1, 2)
 
-    j = 1
+    #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    o1 = 1
     hurdle_up = [Hurdle_Up() for i in range(10)]
     for i in hurdle_up:
-        i.x += 700 * j
-        j += 1
+        i.x += 700 * o1
+        o1 += 1
         game_world.add_object(i, 2)
-
-    k = 1
+    o2 = 1
     hurdle_down = [Hurdle_Down() for i in range(10)]
     for i in hurdle_down:
-        i.x += 700 * k
-        k += 1
+        i.x += 700 * o2
+        o2 += 1
         game_world.add_object(i,2)
 
+    #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    global box_up
+    o3 = 1
+    box_up = [Box_Up() for i in range(10)]
+    for i in box_up:
+        if(o3 % 2 == 0):
+            i.x -= 200
+        i.y += 700 * o3
+        o3 += 1
+        game_world.add_object(i, 2)
+    #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     global life
     life = Life()
@@ -112,30 +124,45 @@ def update():
     if collide(muk,monster1):
         muk.Damage_cnt = 1
         print("충돌")
-        muk.x -= 100
+        if(muk.Mode == 1):
+            muk.x -= 100
+        elif(muk.Mode == 3):
+            muk.x += 100
         muk.Life -= 1
         monster1.cnt_frame = 7
 
         #game_world.remove_object(monster1)
 
-    for ups in hurdle_up:
-        for downs in hurdle_down:
+    if (muk.Mode == 1):
+        for ups in hurdle_up:
+            for downs in hurdle_down:
+                if collide(muk, ups):
+                    muk.Damage_cnt = 1
+                    muk.x -= 200
+                    hurdle_up.remove(ups)
+                    hurdle_down.remove(downs)
+                    game_world.remove_object(ups)
+                    game_world.remove_object(downs)
+                    muk.Life -= 1
+                elif collide(muk, downs):
+                    muk.Damage_cnt = 1
+                    muk.x -= 200
+                    hurdle_up.remove(ups)
+                    hurdle_down.remove(downs)
+                    game_world.remove_object(ups)
+                    game_world.remove_object(downs)
+                    muk.Life -= 1
+
+    elif (muk.Mode == 2):
+        for ups in box_up:
             if collide(muk, ups):
                 muk.Damage_cnt = 1
-                muk.x -= 200
-                hurdle_up.remove(ups)
-                hurdle_down.remove(downs)
+                muk.y -= 200
+                box_up.remove(ups)
                 game_world.remove_object(ups)
-                game_world.remove_object(downs)
                 muk.Life -= 1
-            elif collide(muk, downs):
-                muk.Damage_cnt = 1
-                muk.x -= 200
-                hurdle_up.remove(ups)
-                hurdle_down.remove(downs)
-                game_world.remove_object(ups)
-                game_world.remove_object(downs)
-                muk.Life -= 1
+
+
 
     if(muk.Life < 1):
         global j

@@ -203,12 +203,13 @@ class JumpState:
                 muk.camx = 750
 
             if(int(muk.jump_frame) == 0):
-                muk.y = 750
-                muk.camy = 750
+                muk.y = 800
+                muk.camy = 800
 
             if (muk.x < 200 and muk.jump_frame > 5):
                 muk.Life += 1
-                muk.x = 0
+                muk.x = 100
+                muk.y = 9500
                 muk.camx, muk.camy = 90, 1500
                 muk.add_event(Mode4)
                 muk.Mode = 4

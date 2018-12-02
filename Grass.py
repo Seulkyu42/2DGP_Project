@@ -21,7 +21,7 @@ class Grass:
                 self.image.draw( 1600 * i - main_state.muk.x,400)
             if main_state.muk.Mode == 2:
                 self.image.composite_draw(3.14 / 2,'',1200, 450 + 900 * i - main_state.muk.y)
-                self.image.composite_draw(3.14, '', 1600, 9470)
+                self.image.composite_draw(3.14, '', 1600 - 900 * i, 9470 - main_state.muk.y)
             if main_state.muk.Mode == 3:
                 self.image.composite_draw(3.14, '', 1600 * i - main_state.muk.x, 500)
                 self.image.composite_draw(-3.14 / 2, '', -main_state.muk.x + 400, 450 + 900 * i - main_state.muk.y)
